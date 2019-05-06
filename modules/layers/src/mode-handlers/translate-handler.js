@@ -6,15 +6,17 @@ import turfTransformTranslate from '@turf/transform-translate';
 import { point } from '@turf/helpers';
 import type { FeatureCollection, Position } from '../geojson-types.js';
 import type { PointerMoveEvent, StartDraggingEvent, StopDraggingEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ModeHandler } from './mode-handler.js';
 
 export class TranslateHandler extends ModeHandler {
   _geometryBeforeTranslate: ?FeatureCollection;
   _isTranslatable: boolean;
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
-    let editAction: ?EditAction = null;
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     this._isTranslatable =
       Boolean(this._geometryBeforeTranslate) || this.isSelectionPicked(event.picks);
@@ -36,7 +38,7 @@ export class TranslateHandler extends ModeHandler {
     return { editAction, cancelMapPan: true };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?EditAction {
+  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     if (!this._isTranslatable) {
       return null;
     }
@@ -45,8 +47,8 @@ export class TranslateHandler extends ModeHandler {
     return null;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?EditAction {
-    let editAction: ?EditAction = null;
+  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     if (this._geometryBeforeTranslate) {
       // Translate the geometry
@@ -72,7 +74,7 @@ export class TranslateHandler extends ModeHandler {
     startDragPoint: Position,
     currentPoint: Position,
     editType: string
-  ): ?EditAction {
+  ): ?FeatureCollectionEditAction {
     if (!this._geometryBeforeTranslate) {
       return null;
     }

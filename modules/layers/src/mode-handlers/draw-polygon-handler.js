@@ -2,7 +2,7 @@
 
 import type { Feature, Polygon, Position } from '../geojson-types.js';
 import type { ClickEvent, PointerMoveEvent } from '../event-types.js';
-import type { EditAction, EditHandle } from './mode-handler.js';
+import type { FeatureCollectionEditAction, EditHandle } from './mode-handler.js';
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 
 export class DrawPolygonHandler extends ModeHandler {
@@ -35,13 +35,13 @@ export class DrawPolygonHandler extends ModeHandler {
     });
   }
 
-  handleClick(event: ClickEvent): ?EditAction {
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
     super.handleClick(event);
 
     const { picks } = event;
     const tentativeFeature = this.getTentativeFeature();
 
-    let editAction: ?EditAction = null;
+    let editAction: ?FeatureCollectionEditAction = null;
     const clickedEditHandle = getPickedEditHandle(picks);
 
     if (clickedEditHandle) {
@@ -90,12 +90,21 @@ export class DrawPolygonHandler extends ModeHandler {
     this.handlePointerMove(fakePointerMoveEvent);
     // }, 1000);
 
-    return editAction;
+    if (editAction) {
+      this.getState().onEdit({
+        updatedData: editAction.updatedData,
+        editType: editAction.editType,
+        affectedIndexes: editAction.featureIndexes,
+        editContext: editAction.editContext
+      });
+    }
+
+    return null;
   }
 
   handlePointerMove({
     groundCoords
-  }: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();
     const result = { editAction: null, cancelMapPan: false };
 

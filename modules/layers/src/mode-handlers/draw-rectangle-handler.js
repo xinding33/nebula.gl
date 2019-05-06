@@ -2,11 +2,13 @@
 
 import bboxPolygon from '@turf/bbox-polygon';
 import type { PointerMoveEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { TwoClickPolygonHandler } from './two-click-polygon-handler.js';
 
 export class DrawRectangleHandler extends TwoClickPolygonHandler {
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };
     const clickSequence = this.getClickSequence();
 

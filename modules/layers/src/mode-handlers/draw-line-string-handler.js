@@ -2,14 +2,14 @@
 
 import type { Position, LineString } from '../geojson-types.js';
 import type { ClickEvent, PointerMoveEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ModeHandler } from './mode-handler.js';
 
 export class DrawLineStringHandler extends ModeHandler {
-  handleClick(event: ClickEvent): ?EditAction {
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
     super.handleClick(event);
 
-    let editAction: ?EditAction = null;
+    let editAction: ?FeatureCollectionEditAction = null;
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
     const selectedGeometry = this.getSelectedGeometry();
     const tentativeFeature = this.getTentativeFeature();
@@ -61,7 +61,9 @@ export class DrawLineStringHandler extends ModeHandler {
     return editAction;
   }
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };
 
     const clickSequence = this.getClickSequence();

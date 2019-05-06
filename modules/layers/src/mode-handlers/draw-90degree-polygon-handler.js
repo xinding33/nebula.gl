@@ -8,7 +8,7 @@ import { point, lineString } from '@turf/helpers';
 import { generatePointsParallelToLinePoints } from '../utils';
 import type { ClickEvent, PointerMoveEvent } from '../event-types.js';
 import type { Polygon, Position } from '../geojson-types.js';
-import type { EditAction, EditHandle } from './mode-handler.js';
+import type { FeatureCollectionEditAction, EditHandle } from './mode-handler.js';
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 
 export class Draw90DegreePolygonHandler extends ModeHandler {
@@ -33,7 +33,7 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
 
   handlePointerMove({
     groundCoords
-  }: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();
     const result = { editAction: null, cancelMapPan: false };
 
@@ -83,13 +83,13 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
     return result;
   }
 
-  handleClick(event: ClickEvent): ?EditAction {
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
     super.handleClick(event);
 
     const { picks } = event;
     const tentativeFeature = this.getTentativeFeature();
 
-    let editAction: ?EditAction = null;
+    let editAction: ?FeatureCollectionEditAction = null;
     const clickedEditHandle = getPickedEditHandle(picks);
 
     if (tentativeFeature && tentativeFeature.geometry.type === 'Polygon') {

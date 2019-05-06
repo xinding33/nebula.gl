@@ -3,18 +3,33 @@
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { point, lineString as toLineString } from '@turf/helpers';
 import { recursivelyTraverseNestedArrays } from '../utils.js';
-import type { Position } from '../geojson-types.js';
+import type { FeatureCollection, Feature, Position } from '../geojson-types.js';
 import type {
   ClickEvent,
   PointerMoveEvent,
   StartDraggingEvent,
   StopDraggingEvent
 } from '../event-types.js';
-import type { EditAction, EditHandle } from './mode-handler.js';
+import type { ModeState } from './edit-mode.js';
+import type { FeatureCollectionEditAction, EditHandle } from './mode-handler.js';
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 
 export class ModifyHandler extends ModeHandler {
   _lastPointerMovePicks: *;
+
+  updateState(
+    state: ModeState<FeatureCollection, { tentativeFeature: ?Feature, editHandles: EditHandle[] }>
+  ) {
+    if (Math.random() > 0.5) {
+      const editHandles = this.getEditHandles();
+      state.onUpdateGuides({
+        tentativeFeature: state.guides && state.guides.tentativeFeature,
+        editHandles
+      });
+    }
+
+    super.updateState(state);
+  }
 
   getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
     let handles = [];
@@ -93,8 +108,8 @@ export class ModifyHandler extends ModeHandler {
     return nearestPointOnLine(line, inPoint);
   }
 
-  handleClick(event: ClickEvent): ?EditAction {
-    let editAction: ?EditAction = null;
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     const clickedEditHandle = getPickedEditHandle(event.picks);
 
@@ -145,10 +160,12 @@ export class ModifyHandler extends ModeHandler {
     return editAction;
   }
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     this._lastPointerMovePicks = event.picks;
 
-    let editAction: ?EditAction = null;
+    let editAction: ?FeatureCollectionEditAction = null;
 
     const editHandle = getPickedEditHandle(event.pointerDownPicks);
 
@@ -171,11 +188,26 @@ export class ModifyHandler extends ModeHandler {
     // Cancel map panning if pointer went down on an edit handle
     const cancelMapPan = Boolean(editHandle);
 
+    if (cancelMapPan) {
+      // TODO: find a less hacky way to prevent map panning
+      // Stop propagation to prevent map panning while dragging an edit handle
+      event.sourceEvent.stopPropagation();
+    }
+
+    if (event.picks && event.picks.length > 0) {
+      const handlePicked = event.picks.some(pick => pick.isEditingHandle);
+      if (handlePicked) {
+        this.onUpdateCursor('cell');
+      }
+    } else {
+      this.onUpdateCursor(event.isDragging ? 'grabbing' : 'grab');
+    }
+
     return { editAction, cancelMapPan };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?EditAction {
-    let editAction: ?EditAction = null;
+  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
 
@@ -199,8 +231,8 @@ export class ModifyHandler extends ModeHandler {
     return editAction;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?EditAction {
-    let editAction: ?EditAction = null;
+  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
     const editHandle = getPickedEditHandle(event.picks);

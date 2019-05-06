@@ -1,7 +1,7 @@
 // @flow
 import type { PointerMoveEvent, StopDraggingEvent } from '../event-types.js';
 import type { Position } from '../geojson-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { getPickedEditHandle } from './mode-handler.js';
 import { ModifyHandler } from './modify-handler.js';
 
@@ -22,13 +22,15 @@ export class ElevationHandler extends ModifyHandler {
     });
   }
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const editHandle = getPickedEditHandle(event.pointerDownPicks);
     const position = editHandle ? editHandle.position : event.groundCoords;
     return super.handlePointerMove(this.makeElevatedEvent(event, position));
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?EditAction {
+  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     const editHandle = getPickedEditHandle(event.picks);
     const position = editHandle ? editHandle.position : event.groundCoords;
     return super.handleStopDragging(this.makeElevatedEvent(event, position));

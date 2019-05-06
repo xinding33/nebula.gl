@@ -1,7 +1,7 @@
 // @flow
 /* eslint-env jest */
 import { SplitPolygonHandler } from '../../../src/mode-handlers/split-polygon-handler.js';
-import type { EditAction } from '../../../src/mode-handlers/mode-handler.js';
+import type { FeatureCollectionEditAction } from '../../../src/mode-handlers/mode-handler.js';
 import {
   createFeatureCollection,
   createMultiPolygonFeature,
@@ -84,7 +84,7 @@ describe('Split Polygon Handler ', () => {
     handler.handlePointerMove(createPointerMoveEvent([2, 3]));
     const action = handler.handleClick(createClickEvent([2, 3]));
 
-    const expectedAction: EditAction = {
+    const expectedAction: FeatureCollectionEditAction = {
       updatedData: {
         type: 'FeatureCollection',
         features: [
@@ -145,7 +145,7 @@ describe('Split Polygon Handler ', () => {
     handler.handlePointerMove(createPointerMoveEvent([2, 3]));
     const action = handler.handleClick(createClickEvent([2, 3]));
 
-    const expectedAction: EditAction = {
+    const expectedAction: FeatureCollectionEditAction = {
       updatedData: {
         type: 'FeatureCollection',
         features: [

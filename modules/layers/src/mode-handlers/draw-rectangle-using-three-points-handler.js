@@ -3,11 +3,13 @@
 import { generatePointsParallelToLinePoints } from '../utils';
 import type { LineString } from '../geojson-types.js';
 import type { PointerMoveEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ThreeClickPolygonHandler } from './three-click-polygon-handler.js';
 
 export class DrawRectangleUsingThreePointsHandler extends ThreeClickPolygonHandler {
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };
     const clickSequence = this.getClickSequence();
 

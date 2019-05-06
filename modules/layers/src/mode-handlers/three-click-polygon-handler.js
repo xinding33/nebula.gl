@@ -2,10 +2,10 @@
 
 import type { ClickEvent } from '../event-types.js';
 import { ModeHandler } from './mode-handler.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 
 export class ThreeClickPolygonHandler extends ModeHandler {
-  handleClick(event: ClickEvent): ?EditAction {
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
     super.handleClick(event);
 
     const tentativeFeature = this.getTentativeFeature();

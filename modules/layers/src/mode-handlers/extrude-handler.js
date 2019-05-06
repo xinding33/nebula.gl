@@ -3,16 +3,18 @@
 import bearing from '@turf/bearing';
 import { generatePointsParallelToLinePoints } from '../utils';
 import type { PointerMoveEvent, StartDraggingEvent, StopDraggingEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { getPickedEditHandle } from './mode-handler.js';
 import { ModifyHandler } from './modify-handler';
 
 export class ExtrudeHandler extends ModifyHandler {
   isPointAdded: boolean = false;
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     this._lastPointerMovePicks = event.picks;
 
-    let editAction: ?EditAction = null;
+    let editAction: ?FeatureCollectionEditAction = null;
 
     const editHandle = getPickedEditHandle(event.pointerDownPicks);
 
@@ -58,8 +60,8 @@ export class ExtrudeHandler extends ModifyHandler {
     return { editAction, cancelMapPan };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?EditAction {
-    let editAction: ?EditAction = null;
+  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
 
@@ -115,8 +117,8 @@ export class ExtrudeHandler extends ModifyHandler {
     return editAction;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?EditAction {
-    let editAction: ?EditAction = null;
+  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
     const editHandle = getPickedEditHandle(event.picks);

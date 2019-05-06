@@ -9,7 +9,7 @@ import {
   createClickEvent,
   createPointerMoveEvent
 } from '../test-utils.js';
-import type { EditAction } from '../../../src/mode-handlers/mode-handler.js';
+import type { FeatureCollectionEditAction } from '../../../src/mode-handlers/mode-handler.js';
 
 let featureCollection: FeatureCollection;
 let polygonFeature: Feature;
@@ -63,7 +63,7 @@ test('adds a new feature after two clicks', () => {
   handler.handlePointerMove(createPointerMoveEvent([2, 3]));
   const action2 = handler.handleClick(createClickEvent([2, 3]));
 
-  const expectedAction2: EditAction = {
+  const expectedAction2: FeatureCollectionEditAction = {
     editType: 'addFeature',
     updatedData: {
       ...featureCollection,

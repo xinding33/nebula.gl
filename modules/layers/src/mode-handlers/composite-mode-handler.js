@@ -7,7 +7,7 @@ import type {
   StartDraggingEvent,
   StopDraggingEvent
 } from '../event-types.js';
-import { ModeHandler, type EditAction, type EditHandle } from './mode-handler.js';
+import { ModeHandler, type FeatureCollectionEditAction, type EditHandle } from './mode-handler.js';
 
 export class CompositeModeHandler extends ModeHandler {
   handlers: Array<ModeHandler>;
@@ -48,22 +48,22 @@ export class CompositeModeHandler extends ModeHandler {
     this.handlers.forEach(handler => handler.setDeckGlContext(context));
   }
 
-  handleClick(event: ClickEvent): ?EditAction {
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
     return this._coalesce(handler => handler.handleClick(event));
   }
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(event: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     return this._coalesce(
       handler => handler.handlePointerMove(event),
       result => result && Boolean(result.editAction)
     );
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?EditAction {
+  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     return this._coalesce(handler => handler.handleStartDragging(event));
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?EditAction {
+  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     return this._coalesce(handler => handler.handleStopDragging(event));
   }
 

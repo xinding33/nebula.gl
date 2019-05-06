@@ -24,7 +24,8 @@ export type EditHandle = {
   type: EditHandleType
 };
 
-export type EditAction = {
+// TODO: replace with edit-mode/EditAction
+export type FeatureCollectionEditAction = {
   updatedData: FeatureCollection,
   editType: string,
   featureIndexes: number[],
@@ -167,7 +168,7 @@ export class ModeHandler extends EditMode<
     return selectedFeatureIndexes.some(index => pickedIndexes.includes(index));
   }
 
-  getAddFeatureAction(geometry: Geometry): EditAction {
+  getAddFeatureAction(geometry: Geometry): FeatureCollectionEditAction {
     // Unsure why flow can't deal with Geometry type, but there I fixed it
     const geometryAsAny: any = geometry;
 
@@ -187,7 +188,7 @@ export class ModeHandler extends EditMode<
     };
   }
 
-  getAddManyFeaturesAction(featureCollection: FeatureCollection): EditAction {
+  getAddManyFeaturesAction(featureCollection: FeatureCollection): FeatureCollectionEditAction {
     const features = featureCollection.features;
     let updatedData = this.getImmutableFeatureCollection();
     const initialIndex = updatedData.getObject().features.length;
@@ -211,7 +212,7 @@ export class ModeHandler extends EditMode<
     };
   }
 
-  getAddFeatureOrBooleanPolygonAction(geometry: Polygon): ?EditAction {
+  getAddFeatureOrBooleanPolygonAction(geometry: Polygon): ?FeatureCollectionEditAction {
     const selectedFeature = this.getSelectedFeature();
     const modeConfig = this.getModeConfig();
     if (modeConfig && modeConfig.booleanOperation) {
@@ -257,7 +258,7 @@ export class ModeHandler extends EditMode<
         .replaceGeometry(featureIndex, updatedGeometry.geometry)
         .getObject();
 
-      const editAction: EditAction = {
+      const editAction: FeatureCollectionEditAction = {
         updatedData,
         editType: 'unionGeometry',
         featureIndexes: [featureIndex],
@@ -269,21 +270,23 @@ export class ModeHandler extends EditMode<
     return this.getAddFeatureAction(geometry);
   }
 
-  handleClick(event: ClickEvent): ?EditAction {
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
     this._clickSequence.push(event.groundCoords);
 
     return null;
   }
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     return { editAction: null, cancelMapPan: false };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?EditAction {
+  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     return null;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?EditAction {
+  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     return null;
   }
 }

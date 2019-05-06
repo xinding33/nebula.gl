@@ -5,12 +5,14 @@ import ellipse from '@turf/ellipse';
 import bearing from '@turf/bearing';
 import { point } from '@turf/helpers';
 import type { PointerMoveEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ThreeClickPolygonHandler } from './three-click-polygon-handler.js';
 import { getIntermediatePosition } from './mode-handler.js';
 
 export class DrawEllipseUsingThreePointsHandler extends ThreeClickPolygonHandler {
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };
     const clickSequence = this.getClickSequence();
 

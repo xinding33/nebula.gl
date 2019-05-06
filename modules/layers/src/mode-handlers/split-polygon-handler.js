@@ -12,7 +12,7 @@ import turfPolygonToLine from '@turf/polygon-to-line';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { generatePointsParallelToLinePoints } from '../utils';
 import type { ClickEvent, PointerMoveEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ModeHandler } from './mode-handler.js';
 
 export class SplitPolygonHandler extends ModeHandler {
@@ -63,12 +63,12 @@ export class SplitPolygonHandler extends ModeHandler {
     return nearestPt;
   }
 
-  handleClick(event: ClickEvent): ?EditAction {
+  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
     super.handleClick({
       ...event,
       groundCoords: this.calculateGroundCoords(this.getClickSequence(), event.groundCoords)
     });
-    const editAction: ?EditAction = null;
+    const editAction: ?FeatureCollectionEditAction = null;
     const tentativeFeature = this.getTentativeFeature();
     const selectedGeometry = this.getSelectedGeometry();
     const clickSequence = this.getClickSequence();
@@ -99,7 +99,7 @@ export class SplitPolygonHandler extends ModeHandler {
 
   handlePointerMove({
     groundCoords
-  }: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
+  }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();
     const result = { editAction: null, cancelMapPan: false };
 
@@ -162,7 +162,7 @@ export class SplitPolygonHandler extends ModeHandler {
       coordinates: updatedCoordinates
     });
 
-    const editAction: EditAction = {
+    const editAction: FeatureCollectionEditAction = {
       updatedData: updatedData.getObject(),
       editType: 'split',
       featureIndexes: [featureIndex],

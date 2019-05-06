@@ -5,15 +5,17 @@ import turfDistance from '@turf/distance';
 import turfTransformScale from '@turf/transform-scale';
 import type { FeatureCollection, Position } from '../geojson-types.js';
 import type { PointerMoveEvent, StartDraggingEvent, StopDraggingEvent } from '../event-types.js';
-import type { EditAction } from './mode-handler.js';
+import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ModeHandler } from './mode-handler.js';
 
 export class ScaleHandler extends ModeHandler {
   _isScalable: boolean;
   _geometryBeingScaled: ?FeatureCollection;
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?EditAction, cancelMapPan: boolean } {
-    let editAction: ?EditAction = null;
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     this._isScalable = Boolean(this._geometryBeingScaled) || this.isSelectionPicked(event.picks);
 
@@ -34,7 +36,7 @@ export class ScaleHandler extends ModeHandler {
     return { editAction, cancelMapPan: true };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?EditAction {
+  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     if (!this._isScalable) {
       return null;
     }
@@ -43,8 +45,8 @@ export class ScaleHandler extends ModeHandler {
     return null;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?EditAction {
-    let editAction: ?EditAction = null;
+  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+    let editAction: ?FeatureCollectionEditAction = null;
 
     if (this._geometryBeingScaled) {
       // Scale the geometry
@@ -63,7 +65,11 @@ export class ScaleHandler extends ModeHandler {
     return isDragging ? 'grabbing' : 'grab';
   }
 
-  getScaleAction(startDragPoint: Position, currentPoint: Position, editType: string): EditAction {
+  getScaleAction(
+    startDragPoint: Position,
+    currentPoint: Position,
+    editType: string
+  ): FeatureCollectionEditAction {
     const startPosition = startDragPoint;
     const centroid = turfCentroid(this._geometryBeingScaled);
     const factor = getScaleFactor(centroid, startPosition, currentPoint);

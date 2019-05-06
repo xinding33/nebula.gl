@@ -1,6 +1,7 @@
 // @flow
 import type { Position } from './geojson-types.js';
 
+// TODO: use types in edit-mode.js instead
 export type DeckGLPick = {
   index: number,
   object: any,
