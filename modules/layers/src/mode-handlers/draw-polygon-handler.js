@@ -1,27 +1,38 @@
 // @flow
 
-import type { Polygon, Position } from '../geojson-types.js';
+import type { Feature, Polygon, Position } from '../geojson-types.js';
 import type { ClickEvent, PointerMoveEvent } from '../event-types.js';
 import type { EditAction, EditHandle } from './mode-handler.js';
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 
 export class DrawPolygonHandler extends ModeHandler {
-  getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
+  getEditHandles2(
+    picks?: Array<Object>,
+    groundCoords?: Position,
+    tentativeFeature: ?Feature
+  ): EditHandle[] {
     let handles = super.getEditHandles(picks, groundCoords);
 
-    if (this._tentativeFeature) {
-      handles = handles.concat(getEditHandlesForGeometry(this._tentativeFeature.geometry, -1));
+    if (tentativeFeature) {
+      handles = handles.concat(getEditHandlesForGeometry(tentativeFeature.geometry, -1));
       // Slice off the handles that are are next to the pointer
-      if (this._tentativeFeature && this._tentativeFeature.geometry.type === 'LineString') {
+      if (tentativeFeature && tentativeFeature.geometry.type === 'LineString') {
         // Remove the last existing handle
         handles = handles.slice(0, -1);
-      } else if (this._tentativeFeature && this._tentativeFeature.geometry.type === 'Polygon') {
+      } else if (tentativeFeature && tentativeFeature.geometry.type === 'Polygon') {
         // Remove the last existing handle
         handles = handles.slice(0, -1);
       }
     }
 
     return handles;
+  }
+
+  _setTentativeFeature(tentativeFeature: ?Feature): void {
+    this.getState().onUpdateGuides({
+      tentativeFeature,
+      editHandles: this.getEditHandles2([], [0, 0], tentativeFeature)
+    });
   }
 
   handleClick(event: ClickEvent): ?EditAction {
@@ -74,7 +85,10 @@ export class DrawPolygonHandler extends ModeHandler {
       pointerDownGroundCoords: null,
       sourceEvent: null
     };
+
+    // setTimeout(() => {
     this.handlePointerMove(fakePointerMoveEvent);
+    // }, 1000);
 
     return editAction;
   }

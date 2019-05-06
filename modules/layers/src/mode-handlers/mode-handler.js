@@ -13,6 +13,7 @@ import type {
   DeckGLPick
 } from '../event-types.js';
 import { ImmutableFeatureCollection } from '../immutable-feature-collection.js';
+import { EditMode } from './edit-mode.js';
 
 export type EditHandleType = 'existing' | 'intermediate' | 'snap';
 
@@ -30,17 +31,21 @@ export type EditAction = {
   editContext: any
 };
 
-export class ModeHandler {
+const DEFAULT_EDIT_HANDLES: EditHandle[] = [];
+
+export class ModeHandler extends EditMode<
+  FeatureCollection,
+  { tentativeFeature: ?Feature, editHandles: EditHandle[] }
+> {
   // TODO: add underscore
   featureCollection: ImmutableFeatureCollection;
-  _tentativeFeature: ?Feature;
   _modeConfig: any = null;
-  _selectedFeatureIndexes: number[] = [];
   _clickSequence: Position[] = [];
   _context: Object;
   _layerId: string;
 
   constructor(featureCollection?: FeatureCollection) {
+    super();
     if (featureCollection) {
       this.setFeatureCollection(featureCollection);
     }
@@ -55,8 +60,8 @@ export class ModeHandler {
   }
 
   getSelectedFeature(): ?Feature {
-    if (this._selectedFeatureIndexes.length === 1) {
-      return this.featureCollection.getObject().features[this._selectedFeatureIndexes[0]];
+    if (this.getSelectedIndexes().length === 1) {
+      return this.featureCollection.getObject().features[this.getSelectedIndexes()[0]];
     }
     return null;
   }
@@ -84,30 +89,35 @@ export class ModeHandler {
     this.featureCollection = new ImmutableFeatureCollection(featureCollection);
   }
 
-  getModeConfig(): any {
-    return this._modeConfig;
-  }
+  // getModeConfig(): any {
+  //   return this._modeConfig;
+  // }
 
+  // TODO: delete me
   setModeConfig(modeConfig: any): void {
-    if (this._modeConfig === modeConfig) {
-      return;
-    }
-
-    this._modeConfig = modeConfig;
-    this._setTentativeFeature(null);
+    console.log('TODO: delete setModeConfig'); // eslint-disable-line
   }
 
+  // TODO: delete me
   getSelectedFeatureIndexes(): number[] {
-    return this._selectedFeatureIndexes;
+    console.warn('Deprecated call to getSelectedFeatureIndexes'); // eslint-disable-line
+    return this.getSelectedIndexes();
   }
 
+  // TODO: delete me
   setSelectedFeatureIndexes(indexes: number[]): void {
-    if (this._selectedFeatureIndexes === indexes) {
-      return;
-    }
+    console.log('TODO: delete setSelectedFeatureIndexes'); // eslint-disable-line
+  }
 
-    this._selectedFeatureIndexes = indexes;
+  onSelectedIndexesChanged(): void {
     this._setTentativeFeature(null);
+  }
+
+  onGuidesChanged(): void {
+    if (!this.getGuides()) {
+      // Reset the click sequence
+      this._clickSequence = [];
+    }
   }
 
   setDeckGlContext(context: Object) {
@@ -126,17 +136,15 @@ export class ModeHandler {
     this._clickSequence = [];
   }
 
+  // TODO: delete me
   getTentativeFeature(): ?Feature {
-    return this._tentativeFeature;
+    const guides = this.getGuides();
+    return guides && guides.tentativeFeature;
   }
 
-  // TODO: remove the underscore
+  // TODO: delete me
   _setTentativeFeature(tentativeFeature: ?Feature): void {
-    this._tentativeFeature = tentativeFeature;
-    if (!tentativeFeature) {
-      // Reset the click sequence
-      this._clickSequence = [];
-    }
+    this.getState().onUpdateGuides({ tentativeFeature, editHandles: this.getEditHandles() });
   }
 
   /**
@@ -145,7 +153,7 @@ export class ModeHandler {
    * @param featureIndex The index of the feature to get edit handles
    */
   getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
-    return [];
+    return DEFAULT_EDIT_HANDLES;
   }
 
   getCursor({ isDragging }: { isDragging: boolean }): string {

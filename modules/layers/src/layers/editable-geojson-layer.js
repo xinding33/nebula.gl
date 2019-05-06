@@ -24,7 +24,6 @@ import { DrawEllipseByBoundingBoxHandler } from '../mode-handlers/draw-ellipse-b
 import { DrawEllipseUsingThreePointsHandler } from '../mode-handlers/draw-ellipse-using-three-points-handler.js';
 
 import type { EditAction } from '../mode-handlers/mode-handler.js';
-import type { Position } from '../geojson-types.js';
 import type {
   ClickEvent,
   StartDraggingEvent,
@@ -222,13 +221,46 @@ export default class EditableGeoJsonLayer extends EditableLayer {
     });
   }
 
-  // TODO: figure out how to properly update state from an outside event handler
-  shouldUpdateState({ props, oldProps, context, oldContext, changeFlags }: Object) {
-    if (changeFlags.stateChanged) {
-      return true;
+  setState(partialState: any) {
+    if (partialState && partialState.editHandles) {
+      // console.log(
+      //   'update guides',
+      //   partialState.tentativeFeature && partialState.tentativeFeature.geometry.type,
+      //   partialState.tentativeFeature && partialState.tentativeFeature.geometry.coordinates.length,
+      //   partialState.tentativeFeature &&
+      //     partialState.tentativeFeature.geometry.coordinates[0].length,
+      //   partialState.editHandles.length
+      // );
+      // console.log('update guides', JSON.stringify(partialState));
     }
+
+    this.updateModeState(this.props);
+    super.setState(partialState);
+  }
+
+  shouldUpdateState() {
     return true;
   }
+
+  // // TODO: figure out how to properly update state from an outside event handler
+  // shouldUpdateState(opts: Object) {
+  //   let shouldUpdateState = super.shouldUpdateState(opts);
+
+  //   if (opts.changeFlags.stateChanged) {
+  //     shouldUpdateState = true;
+
+  //     // const needsRedraw = this.getNeedsRedraw && this.getNeedsRedraw()
+  //     // console.log(
+  //     //   'calling modeHandler.updateState',
+  //     //   this.getNeedsRedraw(),
+  //     //   this.internalState.needsRedraw,
+  //     //   JSON.stringify(changeFlags)
+  //     // );
+
+  //     this.updateModeState(this.props);
+  //   }
+  //   return shouldUpdateState;
+  // }
 
   updateState({
     props,
@@ -261,12 +293,10 @@ export default class EditableGeoJsonLayer extends EditableLayer {
         modeHandler.setFeatureCollection(props.data);
       }
 
-      modeHandler.setModeConfig(props.modeConfig);
-      modeHandler.setSelectedFeatureIndexes(props.selectedFeatureIndexes);
+      this.updateModeState(props);
+
       modeHandler.setDeckGlContext(this.context);
       modeHandler.setLayerId(props.id);
-      this.updateTentativeFeature();
-      this.updateEditHandles();
     }
 
     let selectedFeatures = [];
@@ -276,6 +306,36 @@ export default class EditableGeoJsonLayer extends EditableLayer {
     }
 
     this.setState({ selectedFeatures });
+  }
+
+  updateModeState(props: Props) {
+    const modeHandler = props.modeHandlers[props.mode];
+
+    modeHandler.updateState({
+      modeConfig: props.modeConfig,
+      data: props.data,
+      selectedIndexes: props.selectedFeatureIndexes,
+      guides: this.state && {
+        tentativeFeature: this.state.tentativeFeature,
+        editHandles: this.state.editHandles
+      },
+      onEdit: () => {},
+      onUpdateGuides: guides => {
+        if (guides) {
+          this.setState({
+            tentativeFeature: guides.tentativeFeature,
+            editHandles: guides.editHandles
+          });
+        } else {
+          this.setState({
+            tentativeFeature: null,
+            editHandles: null
+          });
+        }
+        this.setLayerNeedsUpdate();
+        this.setNeedsRedraw();
+      }
+    });
   }
 
   selectionAwareAccessor(accessor: any) {
@@ -420,26 +480,8 @@ export default class EditableGeoJsonLayer extends EditableLayer {
     return [layer];
   }
 
-  updateTentativeFeature() {
-    const tentativeFeature = this.state.modeHandler.getTentativeFeature();
-    if (tentativeFeature !== this.state.tentativeFeature) {
-      this.setState({ tentativeFeature });
-      this.setLayerNeedsUpdate();
-    }
-  }
-
-  updateEditHandles(picks?: Array<Object>, groundCoords?: Position) {
-    const editHandles = this.state.modeHandler.getEditHandles(picks, groundCoords);
-    if (editHandles !== this.state.editHandles) {
-      this.setState({ editHandles });
-      this.setLayerNeedsUpdate();
-    }
-  }
-
   onLayerClick(event: ClickEvent) {
     const editAction = this.state.modeHandler.handleClick(event);
-    this.updateTentativeFeature();
-    this.updateEditHandles();
 
     if (editAction) {
       this.props.onEdit(editAction);
@@ -448,8 +490,6 @@ export default class EditableGeoJsonLayer extends EditableLayer {
 
   onStartDragging(event: StartDraggingEvent) {
     const editAction = this.state.modeHandler.handleStartDragging(event);
-    this.updateTentativeFeature();
-    this.updateEditHandles();
 
     if (editAction) {
       this.props.onEdit(editAction);
@@ -458,8 +498,6 @@ export default class EditableGeoJsonLayer extends EditableLayer {
 
   onStopDragging(event: StopDraggingEvent) {
     const editAction = this.state.modeHandler.handleStopDragging(event);
-    this.updateTentativeFeature();
-    this.updateEditHandles();
 
     if (editAction) {
       this.props.onEdit(editAction);
@@ -467,11 +505,9 @@ export default class EditableGeoJsonLayer extends EditableLayer {
   }
 
   onPointerMove(event: PointerMoveEvent) {
-    const { groundCoords, picks, sourceEvent } = event;
+    const { sourceEvent } = event;
 
     const { editAction, cancelMapPan } = this.state.modeHandler.handlePointerMove(event);
-    this.updateTentativeFeature();
-    this.updateEditHandles(picks, groundCoords);
 
     if (cancelMapPan) {
       // TODO: find a less hacky way to prevent map panning
