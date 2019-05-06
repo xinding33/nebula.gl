@@ -53,12 +53,12 @@ describe('SnappableHandler - handler tests', () => {
     expect(action).toBeNull();
   });
 
-  test('getCursor()', () => {
-    expect(handler.getCursor({ isDragging: false })).toEqual('grab');
+  test('getCursorAdapter()', () => {
+    expect(handler.getCursorAdapter({ isDragging: false })).toEqual('grab');
 
     const event = createPointerMoveEvent([1, 1]);
     event.picks = [{ isGuide: true, index: 1, object: {} }];
     handler.handlePointerMoveAdapter(event);
-    expect(handler.getCursor({ isDragging: false })).toEqual('ns-resize');
+    expect(handler.getCursorAdapter({ isDragging: false })).toEqual('ns-resize');
   });
 });

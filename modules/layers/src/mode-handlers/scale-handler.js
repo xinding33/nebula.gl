@@ -53,7 +53,7 @@ export class ScaleHandler extends ModeHandler {
     return editAction;
   }
 
-  getCursor({ isDragging }: { isDragging: boolean }): string {
+  getCursorAdapter({ isDragging }: { isDragging: boolean }): string {
     if (this._isScalable) {
       // TODO: look at doing SVG cursors to get a better "scale" cursor
       return 'move';

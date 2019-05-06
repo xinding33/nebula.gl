@@ -17,7 +17,7 @@ export class DuplicateHandler extends TranslateHandler {
       : null;
   }
 
-  getCursor({ isDragging }: { isDragging: boolean }): string {
+  getCursorAdapter({ isDragging }: { isDragging: boolean }): string {
     if (this._isTranslatable) {
       return 'copy';
     }

@@ -53,7 +53,7 @@ export class RotateHandler extends ModeHandler {
     return editAction;
   }
 
-  getCursor({ isDragging }: { isDragging: boolean }): string {
+  getCursorAdapter({ isDragging }: { isDragging: boolean }): string {
     if (this._isRotatable) {
       // TODO: look at doing SVG cursors to get a better "rotate" cursor
       return 'move';

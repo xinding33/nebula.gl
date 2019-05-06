@@ -63,7 +63,7 @@ export class TranslateHandler extends ModeHandler {
     return editAction;
   }
 
-  getCursor({ isDragging }: { isDragging: boolean }): string {
+  getCursorAdapter({ isDragging }: { isDragging: boolean }): string {
     if (this._isTranslatable) {
       return 'move';
     }

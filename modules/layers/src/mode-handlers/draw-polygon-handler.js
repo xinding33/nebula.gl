@@ -6,7 +6,7 @@ import type { FeatureCollectionEditAction, EditHandle } from './mode-handler.js'
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 
 export class DrawPolygonHandler extends ModeHandler {
-  getEditHandles2(
+  getEditHandles(
     picks?: Array<Object>,
     mapCoords?: Position,
     tentativeFeature: ?Feature
@@ -26,13 +26,6 @@ export class DrawPolygonHandler extends ModeHandler {
     }
 
     return handles;
-  }
-
-  _setTentativeFeature(tentativeFeature: ?Feature): void {
-    this.getState().onUpdateGuides({
-      tentativeFeature,
-      editHandles: this.getEditHandles2([], [0, 0], tentativeFeature)
-    });
   }
 
   handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {

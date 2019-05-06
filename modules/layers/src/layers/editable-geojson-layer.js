@@ -30,7 +30,9 @@ import type {
   StopDraggingEvent,
   PointerMoveEvent
 } from '../event-types.js';
-import type { FeatureCollection } from '../geojson-types.js';
+import type { EditMode } from '../edit-mode.js';
+import type { EditHandle } from '../mode-handlers/mode-handler.js';
+import type { FeatureCollection, Feature } from '../geojson-types.js';
 import { ExtrudeHandler } from '../mode-handlers/extrude-handler.js';
 import EditableLayer from './editable-layer.js';
 
@@ -504,13 +506,14 @@ export default class EditableGeoJsonLayer extends EditableLayer {
     this.getActiveModeHandler().handlePointerMove(event);
   }
 
-  // TODO: get cursor lazily
   getCursor({ isDragging }: { isDragging: boolean }) {
-    return this.getActiveModeHandler().getCursor({ isDragging });
-    // return this.state.cursor;
+    return this.state.cursor;
   }
 
-  getActiveModeHandler(): ModeHandler {
+  getActiveModeHandler(): EditMode<
+    FeatureCollection,
+    { tentativeFeature: ?Feature, editHandles: EditHandle[] }
+  > {
     return this.state.modeHandler;
   }
 }

@@ -468,15 +468,15 @@ describe('SnappableHandler - TranslateHandler tests', () => {
     expect(translateHandler.handleStopDraggingAdapter).toBeCalled();
   });
 
-  test('getCursor()', () => {
+  test('getCursorAdapter()', () => {
     // $FlowFixMe
-    translateHandler.getCursor = jest.fn(v => v);
+    translateHandler.getCursorAdapter = jest.fn(v => v);
     const event = { isDragging: true };
-    const result = snappableHandler.getCursor(event);
+    const result = snappableHandler.getCursorAdapter(event);
 
     expect(result).toBeDefined();
-    expect(translateHandler.getCursor).toBeCalled();
-    expect(translateHandler.getCursor).toBeCalledWith(event);
+    expect(translateHandler.getCursorAdapter).toBeCalled();
+    expect(translateHandler.getCursorAdapter).toBeCalledWith(event);
   });
 
   test('handlePointerMoveAdapter() - positive case', () => {

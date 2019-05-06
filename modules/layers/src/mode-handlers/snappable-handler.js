@@ -211,8 +211,8 @@ export class SnappableHandler extends ModeHandler {
     return modeActionSummary;
   }
 
-  getCursor(event: { isDragging: boolean }): string {
-    return this._handler.getCursor(event);
+  getCursorAdapter(event: { isDragging: boolean }): string {
+    return this._handler.getCursorAdapter(event);
   }
 
   handlePointerMoveAdapter(

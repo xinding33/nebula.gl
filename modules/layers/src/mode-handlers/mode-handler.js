@@ -142,6 +142,23 @@ export class ModeHandler extends EditMode<
     this.getState().onUpdateGuides({ tentativeFeature, editHandles: this.getEditHandles() });
   }
 
+  _refreshEditHandles(): void {
+    const guides = this.getGuides();
+    this.getState().onUpdateGuides({
+      tentativeFeature: guides && guides.tentativeFeature,
+      editHandles: this.getEditHandles()
+    });
+  }
+
+  _refreshCursor(): void {
+    const currentCursor = this.getCursor();
+    const updatedCursor = this.getCursorAdapter({ isDragging: false });
+
+    if (currentCursor !== updatedCursor) {
+      this.onUpdateCursor(updatedCursor);
+    }
+  }
+
   /**
    * Returns a flat array of positions for the given feature along with their indexes into the feature's geometry's coordinates.
    *
@@ -151,7 +168,7 @@ export class ModeHandler extends EditMode<
     return DEFAULT_EDIT_HANDLES;
   }
 
-  getCursor({ isDragging }: { isDragging: boolean }): string {
+  getCursorAdapter({ isDragging }: { isDragging: boolean }): string {
     return 'cell';
   }
 
@@ -270,6 +287,7 @@ export class ModeHandler extends EditMode<
   handleClick(event: ClickEvent): void {
     const editAction = this.handleClickAdapter(event);
 
+    this._refreshEditHandles();
     if (editAction) {
       this.onEdit(editAction);
     }
@@ -284,6 +302,8 @@ export class ModeHandler extends EditMode<
       event.sourceEvent.stopPropagation();
     }
 
+    this._refreshCursor();
+    this._refreshEditHandles();
     if (editAction) {
       this.onEdit(editAction);
     }
@@ -292,6 +312,7 @@ export class ModeHandler extends EditMode<
   handleStartDragging(event: StartDraggingEvent): void {
     const editAction = this.handleStartDraggingAdapter(event);
 
+    this._refreshEditHandles();
     if (editAction) {
       this.onEdit(editAction);
     }
@@ -300,6 +321,7 @@ export class ModeHandler extends EditMode<
   handleStopDragging(event: StopDraggingEvent): void {
     const editAction = this.handleStopDraggingAdapter(event);
 
+    this._refreshEditHandles();
     if (editAction) {
       this.onEdit(editAction);
     }

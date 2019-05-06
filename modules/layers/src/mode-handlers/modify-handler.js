@@ -3,33 +3,18 @@
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import { point, lineString as toLineString } from '@turf/helpers';
 import { recursivelyTraverseNestedArrays } from '../utils.js';
-import type { FeatureCollection, Feature, Position } from '../geojson-types.js';
+import type { Position } from '../geojson-types.js';
 import type {
   ClickEvent,
   PointerMoveEvent,
   StartDraggingEvent,
   StopDraggingEvent
 } from '../event-types.js';
-import type { ModeState } from '../edit-mode.js';
 import type { FeatureCollectionEditAction, EditHandle } from './mode-handler.js';
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 
 export class ModifyHandler extends ModeHandler {
   _lastPointerMovePicks: *;
-
-  updateState(
-    state: ModeState<FeatureCollection, { tentativeFeature: ?Feature, editHandles: EditHandle[] }>
-  ) {
-    if (Math.random() > 0.5) {
-      const editHandles = this.getEditHandles();
-      state.onUpdateGuides({
-        tentativeFeature: state.guides && state.guides.tentativeFeature,
-        editHandles
-      });
-    }
-
-    super.updateState(state);
-  }
 
   getEditHandles(picks?: Array<Object>, mapCoords?: Position): EditHandle[] {
     let handles = [];
@@ -249,7 +234,7 @@ export class ModifyHandler extends ModeHandler {
     return editAction;
   }
 
-  getCursor({ isDragging }: { isDragging: boolean }): string {
+  getCursorAdapter({ isDragging }: { isDragging: boolean }): string {
     const picks = this._lastPointerMovePicks;
 
     if (picks && picks.length > 0) {
