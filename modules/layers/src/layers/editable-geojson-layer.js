@@ -23,7 +23,7 @@ import { DrawCircleByBoundingBoxHandler } from '../mode-handlers/draw-circle-by-
 import { DrawEllipseByBoundingBoxHandler } from '../mode-handlers/draw-ellipse-by-bounding-box-handler.js';
 import { DrawEllipseUsingThreePointsHandler } from '../mode-handlers/draw-ellipse-using-three-points-handler.js';
 
-import type { EditAction } from '../mode-handlers/edit-mode.js';
+import type { EditAction } from '../edit-mode.js';
 import type {
   ClickEvent,
   StartDraggingEvent,

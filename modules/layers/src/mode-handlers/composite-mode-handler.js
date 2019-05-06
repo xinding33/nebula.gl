@@ -52,7 +52,9 @@ export class CompositeModeHandler extends ModeHandler {
     return this._coalesce(handler => handler.handleClick(event));
   }
 
-  handlePointerMove(event: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
+  handlePointerMove(
+    event: PointerMoveEvent
+  ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     return this._coalesce(
       handler => handler.handlePointerMove(event),
       result => result && Boolean(result.editAction)

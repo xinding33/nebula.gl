@@ -10,7 +10,7 @@ import type {
   StartDraggingEvent,
   StopDraggingEvent
 } from '../event-types.js';
-import type { ModeState } from './edit-mode.js';
+import type { ModeState } from '../edit-mode.js';
 import type { FeatureCollectionEditAction, EditHandle } from './mode-handler.js';
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 

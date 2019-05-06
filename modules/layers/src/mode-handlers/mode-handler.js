@@ -13,7 +13,7 @@ import type {
   DeckGLPick
 } from '../event-types.js';
 import { ImmutableFeatureCollection } from '../immutable-feature-collection.js';
-import { EditMode } from './edit-mode.js';
+import { EditMode } from '../edit-mode.js';
 
 export type EditHandleType = 'existing' | 'intermediate' | 'snap';
 
