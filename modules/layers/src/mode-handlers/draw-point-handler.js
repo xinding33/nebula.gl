@@ -5,10 +5,10 @@ import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ModeHandler } from './mode-handler.js';
 
 export class DrawPointHandler extends ModeHandler {
-  handleClick({ groundCoords }: ClickEvent): ?FeatureCollectionEditAction {
+  handleClickAdapter({ mapCoords }: ClickEvent): ?FeatureCollectionEditAction {
     const geometry = {
       type: 'Point',
-      coordinates: groundCoords
+      coordinates: mapCoords
     };
 
     return this.getAddFeatureAction(geometry);

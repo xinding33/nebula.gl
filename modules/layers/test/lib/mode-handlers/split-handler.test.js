@@ -15,7 +15,7 @@ describe('Split Polygon Handler ', () => {
     const featureCollection = createFeatureCollection();
     const handler = new SplitPolygonHandler(featureCollection);
     handler.setSelectedFeatureIndexes([2]);
-    handler.handleClick(createClickEvent([1, 2]));
+    handler.handleClickAdapter(createClickEvent([1, 2]));
     handler.handlePointerMove(createPointerMoveEvent([2, 3]));
     const tentativeFeature = handler.getTentativeFeature();
     expect(tentativeFeature).toEqual({
@@ -27,11 +27,11 @@ describe('Split Polygon Handler ', () => {
     });
   });
 
-  describe('should reset tentativeFeature on handleClick ', () => {
+  describe('should reset tentativeFeature on handleClickAdapter ', () => {
     test('when selectedGeometry is not selected ', () => {
       const featureCollection = createFeatureCollection();
       const handler = new SplitPolygonHandler(featureCollection);
-      const action = handler.handleClick(createClickEvent([1, 2]));
+      const action = handler.handleClickAdapter(createClickEvent([1, 2]));
       const tentativeFeature = handler.getTentativeFeature();
       expect(action).toBeNull();
       expect(tentativeFeature).toBeNull();
@@ -41,9 +41,9 @@ describe('Split Polygon Handler ', () => {
       const featureCollection = createFeatureCollection();
       const handler = new SplitPolygonHandler(featureCollection);
       handler.setSelectedFeatureIndexes([2]);
-      const action1 = handler.handleClick(createClickEvent([-2, -2]));
+      const action1 = handler.handleClickAdapter(createClickEvent([-2, -2]));
       handler.handlePointerMove(createPointerMoveEvent([-1, -1]));
-      const action = handler.handleClick(createClickEvent([-1, -1]));
+      const action = handler.handleClickAdapter(createClickEvent([-1, -1]));
       expect(action1).toBeNull();
       expect(action).toBeNull();
     });
@@ -52,9 +52,9 @@ describe('Split Polygon Handler ', () => {
       const featureCollection = createFeatureCollection();
       const handler = new SplitPolygonHandler(featureCollection);
       handler.setSelectedFeatureIndexes([2]);
-      const action1 = handler.handleClick(createClickEvent([-2, -2]));
+      const action1 = handler.handleClickAdapter(createClickEvent([-2, -2]));
       handler.handlePointerMove(createPointerMoveEvent([-4, -4]));
-      const action = handler.handleClick(createClickEvent([-4, -4]));
+      const action = handler.handleClickAdapter(createClickEvent([-4, -4]));
       expect(action1).toBeNull();
       expect(action).toBeNull();
     });
@@ -64,9 +64,9 @@ describe('Split Polygon Handler ', () => {
       const handler = new SplitPolygonHandler(featureCollection);
       handler.setModeConfig({ lock90Degree: true });
       handler.setSelectedFeatureIndexes([2]);
-      const action1 = handler.handleClick(createClickEvent([-2, -2]));
+      const action1 = handler.handleClickAdapter(createClickEvent([-2, -2]));
       handler.handlePointerMove(createPointerMoveEvent([-4, -4]));
-      const action = handler.handleClick(createClickEvent([-4, -4]));
+      const action = handler.handleClickAdapter(createClickEvent([-4, -4]));
       expect(action1).toBeNull();
       expect(action).toMatchSnapshot();
     });
@@ -80,9 +80,9 @@ describe('Split Polygon Handler ', () => {
     const handler = new SplitPolygonHandler(featureCollection);
     handler.setModeConfig({});
     handler.setSelectedFeatureIndexes([0]);
-    handler.handleClick(createClickEvent([-2, -2]));
+    handler.handleClickAdapter(createClickEvent([-2, -2]));
     handler.handlePointerMove(createPointerMoveEvent([2, 3]));
-    const action = handler.handleClick(createClickEvent([2, 3]));
+    const action = handler.handleClickAdapter(createClickEvent([2, 3]));
 
     const expectedAction: FeatureCollectionEditAction = {
       updatedData: {
@@ -141,9 +141,9 @@ describe('Split Polygon Handler ', () => {
     const handler = new SplitPolygonHandler(featureCollection);
     handler.setModeConfig({});
     handler.setSelectedFeatureIndexes([0]);
-    handler.handleClick(createClickEvent([-2, -2]));
+    handler.handleClickAdapter(createClickEvent([-2, -2]));
     handler.handlePointerMove(createPointerMoveEvent([2, 3]));
-    const action = handler.handleClick(createClickEvent([2, 3]));
+    const action = handler.handleClickAdapter(createClickEvent([2, 3]));
 
     const expectedAction: FeatureCollectionEditAction = {
       updatedData: {

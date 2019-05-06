@@ -18,7 +18,7 @@ export class DrawRectangleHandler extends TwoClickPolygonHandler {
     }
 
     const corner1 = clickSequence[0];
-    const corner2 = event.groundCoords;
+    const corner2 = event.mapCoords;
     this._setTentativeFeature(bboxPolygon([corner1[0], corner1[1], corner2[0], corner2[1]]));
 
     return result;

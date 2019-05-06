@@ -61,7 +61,7 @@ export class EditMode<TData, TGuides> {
   }
 
   // Overridable user interaction handlers
-  handleClick2(event: ClickEvent): void {}
+  handleClick(event: ClickEvent): void {}
   handlePointerMove2(event: PointerMoveEvent): void {}
   handleStartDragging2(event: StartDraggingEvent): void {}
   handleStopDragging2(event: StopDraggingEvent): void {}

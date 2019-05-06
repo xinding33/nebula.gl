@@ -16,10 +16,10 @@ import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ModeHandler } from './mode-handler.js';
 
 export class SplitPolygonHandler extends ModeHandler {
-  calculateGroundCoords(clickSequence: any, groundCoords: any) {
+  calculateMapCoords(clickSequence: any, mapCoords: any) {
     const modeConfig = this.getModeConfig();
     if (!modeConfig || !modeConfig.lock90Degree || !clickSequence.length) {
-      return groundCoords;
+      return mapCoords;
     }
     if (clickSequence.length === 1) {
       // if first point is clicked, then find closest polygon point and build ~90deg vector
@@ -43,30 +43,30 @@ export class SplitPolygonHandler extends ModeHandler {
       if (closestPoint) {
         // closest point is used as 90degree entry to the polygon
         const lastBearing = turfBearing(firstPoint, closestPoint);
-        const currentDistance = turfDistance(firstPoint, groundCoords, { units: 'meters' });
+        const currentDistance = turfDistance(firstPoint, mapCoords, { units: 'meters' });
         return turfDestination(firstPoint, currentDistance, lastBearing, {
           units: 'meters'
         }).geometry.coordinates;
       }
-      return groundCoords;
+      return mapCoords;
     }
     // Allow only 90 degree turns
     const lastPoint = clickSequence[clickSequence.length - 1];
     const [approximatePoint] = generatePointsParallelToLinePoints(
       clickSequence[clickSequence.length - 2],
       lastPoint,
-      groundCoords
+      mapCoords
     );
     // align point with current ground
-    const nearestPt = nearestPointOnLine(lineString([lastPoint, approximatePoint]), groundCoords)
+    const nearestPt = nearestPointOnLine(lineString([lastPoint, approximatePoint]), mapCoords)
       .geometry.coordinates;
     return nearestPt;
   }
 
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
-    super.handleClick({
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
+    super.handleClickAdapter({
       ...event,
-      groundCoords: this.calculateGroundCoords(this.getClickSequence(), event.groundCoords)
+      mapCoords: this.calculateMapCoords(this.getClickSequence(), event.mapCoords)
     });
     const editAction: ?FeatureCollectionEditAction = null;
     const tentativeFeature = this.getTentativeFeature();
@@ -98,7 +98,7 @@ export class SplitPolygonHandler extends ModeHandler {
   }
 
   handlePointerMove({
-    groundCoords
+    mapCoords
   }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();
     const result = { editAction: null, cancelMapPan: false };
@@ -112,7 +112,7 @@ export class SplitPolygonHandler extends ModeHandler {
       type: 'Feature',
       geometry: {
         type: 'LineString',
-        coordinates: [...clickSequence, this.calculateGroundCoords(clickSequence, groundCoords)]
+        coordinates: [...clickSequence, this.calculateMapCoords(clickSequence, mapCoords)]
       }
     });
 

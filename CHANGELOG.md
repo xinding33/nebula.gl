@@ -10,7 +10,7 @@ _All notable changes to this project will be documented in this file. This proje
 
 #### Breaking Changes
 
-* `featureIndexes` renamed to `affectedIndexes` in parameter passed to `onEdit` callback
+* `featureIndexes` is now nested under `editContext.featureIndexes` in parameter passed to `onEdit` callback
 * `ModeHandler`: if you built a custom `ModeHandler`, note the following breaking changes:
   * Fire an edit action by calling `super.onEdit` rather than returning an `EditAction` from your `handle...` functions
   * Update edit handles and tentative feature by calling `super.onUpdateGuides` rather than defining a `getEditHandles` function

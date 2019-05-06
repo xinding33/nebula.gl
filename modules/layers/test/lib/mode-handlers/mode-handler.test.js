@@ -91,19 +91,19 @@ describe('setSelectedFeatureIndexes()', () => {
   });
 });
 
-describe('handleClick', () => {
+describe('handleClickAdapter', () => {
   it('tracks click sequence', () => {
     const handler = new ModeHandler(featureCollection);
 
-    handler.handleClick({
+    handler.handleClickAdapter({
       screenCoords: [-1, -1],
-      groundCoords: [0, 1],
+      mapCoords: [0, 1],
       picks: [],
       sourceEvent: null
     });
-    handler.handleClick({
+    handler.handleClickAdapter({
       screenCoords: [-1, -1],
-      groundCoords: [2, 3],
+      mapCoords: [2, 3],
       picks: [],
       sourceEvent: null
     });

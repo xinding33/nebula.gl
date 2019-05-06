@@ -21,7 +21,7 @@ export class TranslateHandler extends ModeHandler {
     this._isTranslatable =
       Boolean(this._geometryBeforeTranslate) || this.isSelectionPicked(event.picks);
 
-    if (!this._isTranslatable || !event.pointerDownGroundCoords) {
+    if (!this._isTranslatable || !event.pointerDownMapCoords) {
       // Nothing to do
       return { editAction: null, cancelMapPan: false };
     }
@@ -29,8 +29,8 @@ export class TranslateHandler extends ModeHandler {
     if (event.isDragging && this._geometryBeforeTranslate) {
       // Translate the geometry
       editAction = this.getTranslateAction(
-        event.pointerDownGroundCoords,
-        event.groundCoords,
+        event.pointerDownMapCoords,
+        event.mapCoords,
         'translating'
       );
     }
@@ -53,8 +53,8 @@ export class TranslateHandler extends ModeHandler {
     if (this._geometryBeforeTranslate) {
       // Translate the geometry
       editAction = this.getTranslateAction(
-        event.pointerDownGroundCoords,
-        event.groundCoords,
+        event.pointerDownMapCoords,
+        event.mapCoords,
         'translated'
       );
       this._geometryBeforeTranslate = null;

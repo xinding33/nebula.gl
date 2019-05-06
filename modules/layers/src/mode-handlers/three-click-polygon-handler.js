@@ -5,8 +5,8 @@ import { ModeHandler } from './mode-handler.js';
 import type { FeatureCollectionEditAction } from './mode-handler.js';
 
 export class ThreeClickPolygonHandler extends ModeHandler {
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
-    super.handleClick(event);
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
+    super.handleClickAdapter(event);
 
     const tentativeFeature = this.getTentativeFeature();
     const clickSequence = this.getClickSequence();

@@ -521,14 +521,14 @@ export default class Example extends Component<
       autoHighlight: false,
 
       // Editing callbacks
-      onEdit: ({ updatedData, editType, affectedIndexes, editContext }) => {
+      onEdit: ({ updatedData, editType, editContext }) => {
         let updatedSelectedFeatureIndexes = this.state.selectedFeatureIndexes;
         if (
           !['movePosition', 'extruding', 'rotating', 'translating', 'scaling'].includes(editType)
         ) {
           // Don't log edits that happen as the pointer moves since they're really chatty
           // eslint-disable-next-line
-          console.log('onEdit', editType, affectedIndexes, editContext);
+          console.log('onEdit', editType, editContext);
         }
         if (editType === 'removePosition' && !this.state.pointsRemovable) {
           // This is a simple example of custom handling of edits
@@ -536,11 +536,9 @@ export default class Example extends Component<
           return;
         }
         if (editType === 'addFeature' && mode !== 'duplicate') {
+          const { featureIndexes } = editContext;
           // Add the new feature to the selection
-          updatedSelectedFeatureIndexes = [
-            ...this.state.selectedFeatureIndexes,
-            ...affectedIndexes
-          ];
+          updatedSelectedFeatureIndexes = [...this.state.selectedFeatureIndexes, ...featureIndexes];
         }
         this.setState({
           testFeatures: updatedData,

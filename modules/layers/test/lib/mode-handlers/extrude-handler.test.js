@@ -248,13 +248,13 @@ describe('handleStartDragging()', () => {
             type: 'intermediate',
             positionIndexes: [0, 1]
           },
-          isEditingHandle: true
+          isGuide: true
         }
       ],
       screenCoords: [0, 0],
-      groundCoords: [0, 0],
+      mapCoords: [0, 0],
       pointerDownScreenCoords: [0, 0],
-      pointerDownGroundCoords: [0, 0],
+      pointerDownMapCoords: [0, 0],
       sourceEvent: null
     };
     const actual: any = features.handleStartDragging(startEvent);
@@ -282,13 +282,13 @@ describe('handleStopDragging()', () => {
             type: 'intermediate',
             positionIndexes: [0, 1]
           },
-          isEditingHandle: true
+          isGuide: true
         }
       ],
       screenCoords: [0, 0],
-      groundCoords: [0, 0],
+      mapCoords: [0, 0],
       pointerDownScreenCoords: [0, 0],
-      pointerDownGroundCoords: [0, 0],
+      pointerDownMapCoords: [0, 0],
       sourceEvent: null
     };
     const actual: any = features.handleStopDragging(event);
@@ -318,13 +318,13 @@ describe('handlePointerMove()', () => {
             type: 'intermediate',
             positionIndexes: [0, 1]
           },
-          isEditingHandle: true
+          isGuide: true
         }
       ],
       screenCoords: [0, 0],
-      groundCoords: [0, 0],
+      mapCoords: [0, 0],
       pointerDownScreenCoords: [0, 0],
-      pointerDownGroundCoords: [0, 0],
+      pointerDownMapCoords: [0, 0],
       sourceEvent: null
     };
     const actual: any = features.handlePointerMove(event);

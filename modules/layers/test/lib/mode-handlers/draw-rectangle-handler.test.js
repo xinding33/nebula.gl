@@ -40,7 +40,7 @@ test('sets tentative feature to a Polygon after first click', () => {
   const handler = new DrawRectangleHandler(featureCollection);
 
   handler.handlePointerMove(createPointerMoveEvent([1, 2]));
-  handler.handleClick(createClickEvent([1, 2]));
+  handler.handleClickAdapter(createClickEvent([1, 2]));
   handler.handlePointerMove(createPointerMoveEvent([2, 3]));
 
   const tentativeFeature = handler.getTentativeFeature();
@@ -59,9 +59,9 @@ test('adds a new feature after two clicks', () => {
   const handler = new DrawRectangleHandler(featureCollection);
 
   handler.handlePointerMove(createPointerMoveEvent([1, 2]));
-  const action1 = handler.handleClick(createClickEvent([1, 2]));
+  const action1 = handler.handleClickAdapter(createClickEvent([1, 2]));
   handler.handlePointerMove(createPointerMoveEvent([2, 3]));
-  const action2 = handler.handleClick(createClickEvent([2, 3]));
+  const action2 = handler.handleClickAdapter(createClickEvent([2, 3]));
 
   const expectedAction2: FeatureCollectionEditAction = {
     editType: 'addFeature',
@@ -97,9 +97,9 @@ describe('modeConfig.booleanOperation', () => {
       const areaBefore = turfArea(featureCollection.features[polygonFeatureIndex]);
 
       handler.handlePointerMove(createPointerMoveEvent([0, 0]));
-      handler.handleClick(createClickEvent([0, 0]));
+      handler.handleClickAdapter(createClickEvent([0, 0]));
       handler.handlePointerMove(createPointerMoveEvent([2, 2]));
-      const action = handler.handleClick(createClickEvent([2, 2]));
+      const action = handler.handleClickAdapter(createClickEvent([2, 2]));
 
       if (!action) {
         throw new Error('Should return action');
@@ -120,9 +120,9 @@ describe('modeConfig.booleanOperation', () => {
       const areaBefore = turfArea(featureCollection.features[polygonFeatureIndex]);
 
       handler.handlePointerMove(createPointerMoveEvent([0, 0]));
-      handler.handleClick(createClickEvent([0, 0]));
+      handler.handleClickAdapter(createClickEvent([0, 0]));
       handler.handlePointerMove(createPointerMoveEvent([2, 2]));
-      const action = handler.handleClick(createClickEvent([2, 2]));
+      const action = handler.handleClickAdapter(createClickEvent([2, 2]));
 
       if (!action) {
         throw new Error('Should return action');
@@ -143,9 +143,9 @@ describe('modeConfig.booleanOperation', () => {
       const areaBefore = turfArea(featureCollection.features[polygonFeatureIndex]);
 
       handler.handlePointerMove(createPointerMoveEvent([0, 0]));
-      handler.handleClick(createClickEvent([0, 0]));
+      handler.handleClickAdapter(createClickEvent([0, 0]));
       handler.handlePointerMove(createPointerMoveEvent([2, 2]));
-      const action = handler.handleClick(createClickEvent([2, 2]));
+      const action = handler.handleClickAdapter(createClickEvent([2, 2]));
 
       if (!action) {
         throw new Error('Should return action');

@@ -29,7 +29,7 @@ export class DrawCircleFromCenterHandler extends TwoClickPolygonHandler {
     }
 
     const centerCoordinates = clickSequence[0];
-    const radius = Math.max(distance(centerCoordinates, event.groundCoords), 0.001);
+    const radius = Math.max(distance(centerCoordinates, event.mapCoords), 0.001);
     this._setTentativeFeature(circle(centerCoordinates, radius, options));
 
     return result;

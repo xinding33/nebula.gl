@@ -31,7 +31,7 @@ export class ExtrudeHandler extends ModifyHandler {
       const p2 = this.getPointForPositionIndexes(positionIndexes, editHandle.featureIndex);
       if (p1 && p2) {
         // p3 and p4 are end points for moving (extruding) edge
-        const [p3, p4] = generatePointsParallelToLinePoints(p1, p2, event.groundCoords);
+        const [p3, p4] = generatePointsParallelToLinePoints(p1, p2, event.mapCoords);
 
         const updatedData = this.getImmutableFeatureCollection()
           .replacePosition(
@@ -45,8 +45,8 @@ export class ExtrudeHandler extends ModifyHandler {
         editAction = {
           updatedData,
           editType: 'extruding',
-          featureIndexes: [editHandle.featureIndex],
           editContext: {
+            featureIndexes: [editHandle.featureIndex],
             positionIndexes: this.nextPositionIndexes(editHandle.positionIndexes, size),
             position: p3
           }
@@ -105,8 +105,8 @@ export class ExtrudeHandler extends ModifyHandler {
         editAction = {
           updatedData: updatedData.getObject(),
           editType: 'startExtruding',
-          featureIndexes: [editHandle.featureIndex],
           editContext: {
+            featureIndexes: [editHandle.featureIndex],
             positionIndexes: editHandle.positionIndexes,
             position: p1
           }
@@ -136,7 +136,7 @@ export class ExtrudeHandler extends ModifyHandler {
 
       if (p1 && p2) {
         // p3 and p4 are end points for new moved (extruded) edge
-        const [p3, p4] = generatePointsParallelToLinePoints(p1, p2, event.groundCoords);
+        const [p3, p4] = generatePointsParallelToLinePoints(p1, p2, event.mapCoords);
 
         const updatedData = this.getImmutableFeatureCollection()
           .replacePosition(
@@ -150,8 +150,8 @@ export class ExtrudeHandler extends ModifyHandler {
         editAction = {
           updatedData,
           editType: 'extruded',
-          featureIndexes: [editHandle.featureIndex],
           editContext: {
+            featureIndexes: [editHandle.featureIndex],
             positionIndexes: editHandle.positionIndexes,
             position: p3
           }

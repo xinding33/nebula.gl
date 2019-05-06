@@ -9,7 +9,7 @@ export class ViewHandler extends ModeHandler {
     return isDragging ? 'grabbing' : 'grab';
   }
 
-  getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
+  getEditHandles(picks?: Array<Object>, mapCoords?: Position): EditHandle[] {
     return [];
   }
 }

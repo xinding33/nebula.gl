@@ -23,8 +23,8 @@ import { DrawCircleByBoundingBoxHandler } from '../mode-handlers/draw-circle-by-
 import { DrawEllipseByBoundingBoxHandler } from '../mode-handlers/draw-ellipse-by-bounding-box-handler.js';
 import { DrawEllipseUsingThreePointsHandler } from '../mode-handlers/draw-ellipse-using-three-points-handler.js';
 
-import type { EditAction } from '../edit-mode.js';
 import type {
+  EditAction,
   ClickEvent,
   StartDraggingEvent,
   StopDraggingEvent,
@@ -367,7 +367,7 @@ export default class EditableGeoJsonLayer extends EditableLayer {
   getPickingInfo({ info, sourceLayer }: Object) {
     if (sourceLayer.id.endsWith('-edit-handles')) {
       // If user is picking an editing handle, add additional data to the info
-      info.isEditingHandle = true;
+      info.isGuide = true;
     }
 
     return info;
@@ -489,7 +489,7 @@ export default class EditableGeoJsonLayer extends EditableLayer {
   }
 
   onLayerClick(event: ClickEvent) {
-    const editAction = this.state.modeHandler.handleClick(event);
+    const editAction = this.state.modeHandler.handleClickAdapter(event);
 
     if (editAction) {
       this.props.onEdit(editAction);

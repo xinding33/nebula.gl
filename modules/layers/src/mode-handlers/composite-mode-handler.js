@@ -48,8 +48,8 @@ export class CompositeModeHandler extends ModeHandler {
     this.handlers.forEach(handler => handler.setDeckGlContext(context));
   }
 
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
-    return this._coalesce(handler => handler.handleClick(event));
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
+    return this._coalesce(handler => handler.handleClickAdapter(event));
   }
 
   handlePointerMove(
@@ -73,12 +73,12 @@ export class CompositeModeHandler extends ModeHandler {
     return this._coalesce(handler => handler.getTentativeFeature());
   }
 
-  getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
+  getEditHandles(picks?: Array<Object>, mapCoords?: Position): EditHandle[] {
     // TODO: Combine the handles *BUT* make sure if none of the results have
     // changed to return the same object so that "editHandles !== this.state.editHandles"
     // in editable-geojson-layer works.
     return this._coalesce(
-      handler => handler.getEditHandles(picks, groundCoords),
+      handler => handler.getEditHandles(picks, mapCoords),
       handles => Array.isArray(handles) && handles.length > 0
     );
   }

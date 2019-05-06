@@ -6,11 +6,12 @@ import turfIntersect from '@turf/intersect';
 
 import type { FeatureCollection, Feature, Polygon, Geometry, Position } from '../geojson-types.js';
 import type {
+  EditAction,
   ClickEvent,
   PointerMoveEvent,
   StartDraggingEvent,
   StopDraggingEvent,
-  DeckGLPick
+  Pick
 } from '../event-types.js';
 import { ImmutableFeatureCollection } from '../immutable-feature-collection.js';
 import { EditMode } from '../edit-mode.js';
@@ -24,13 +25,7 @@ export type EditHandle = {
   type: EditHandleType
 };
 
-// TODO: replace with edit-mode/EditAction
-export type FeatureCollectionEditAction = {
-  updatedData: FeatureCollection,
-  editType: string,
-  featureIndexes: number[],
-  editContext: any
-};
+export type FeatureCollectionEditAction = EditAction<FeatureCollection>;
 
 const DEFAULT_EDIT_HANDLES: EditHandle[] = [];
 
@@ -153,7 +148,7 @@ export class ModeHandler extends EditMode<
    *
    * @param featureIndex The index of the feature to get edit handles
    */
-  getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
+  getEditHandles(picks?: Array<Object>, mapCoords?: Position): EditHandle[] {
     return DEFAULT_EDIT_HANDLES;
   }
 
@@ -161,7 +156,7 @@ export class ModeHandler extends EditMode<
     return 'cell';
   }
 
-  isSelectionPicked(picks: DeckGLPick[]): boolean {
+  isSelectionPicked(picks: Pick[]): boolean {
     if (!picks.length) return false;
     const pickedIndexes = picks.map(({ index }) => index);
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
@@ -183,8 +178,9 @@ export class ModeHandler extends EditMode<
     return {
       updatedData,
       editType: 'addFeature',
-      featureIndexes: [updatedData.features.length - 1],
-      editContext: null
+      editContext: {
+        featureIndexes: [updatedData.features.length - 1]
+      }
     };
   }
 
@@ -207,8 +203,9 @@ export class ModeHandler extends EditMode<
     return {
       updatedData: updatedData.getObject(),
       editType: 'addFeature',
-      featureIndexes: updatedIndexes,
-      editContext: null
+      editContext: {
+        featureIndexes: updatedIndexes
+      }
     };
   }
 
@@ -261,8 +258,9 @@ export class ModeHandler extends EditMode<
       const editAction: FeatureCollectionEditAction = {
         updatedData,
         editType: 'unionGeometry',
-        featureIndexes: [featureIndex],
-        editContext: null
+        editContext: {
+          featureIndexes: [featureIndex]
+        }
       };
 
       return editAction;
@@ -270,8 +268,17 @@ export class ModeHandler extends EditMode<
     return this.getAddFeatureAction(geometry);
   }
 
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
-    this._clickSequence.push(event.groundCoords);
+  handleClick(event: ClickEvent): void {
+    const editAction = this.handleClickAdapter(event);
+
+    if (editAction) {
+      this.onEdit(editAction);
+    }
+  }
+
+  // TODO: delete once all ModeHandler implementations override handleClick instead
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
+    this._clickSequence.push(event.mapCoords);
 
     return null;
   }
@@ -292,7 +299,7 @@ export class ModeHandler extends EditMode<
 }
 
 export function getPickedEditHandle(picks: ?(any[])): ?EditHandle {
-  const info = picks && picks.find(pick => pick.isEditingHandle);
+  const info = picks && picks.find(pick => pick.isGuide);
   if (info) {
     return info.object;
   }

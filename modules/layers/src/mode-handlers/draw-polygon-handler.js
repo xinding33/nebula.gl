@@ -8,10 +8,10 @@ import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './m
 export class DrawPolygonHandler extends ModeHandler {
   getEditHandles2(
     picks?: Array<Object>,
-    groundCoords?: Position,
+    mapCoords?: Position,
     tentativeFeature: ?Feature
   ): EditHandle[] {
-    let handles = super.getEditHandles(picks, groundCoords);
+    let handles = super.getEditHandles(picks, mapCoords);
 
     if (tentativeFeature) {
       handles = handles.concat(getEditHandlesForGeometry(tentativeFeature.geometry, -1));
@@ -35,8 +35,8 @@ export class DrawPolygonHandler extends ModeHandler {
     });
   }
 
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
-    super.handleClick(event);
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
+    super.handleClickAdapter(event);
 
     const { picks } = event;
     const tentativeFeature = this.getTentativeFeature();
@@ -77,33 +77,22 @@ export class DrawPolygonHandler extends ModeHandler {
     // Trigger pointer move right away in order for it to update edit handles (to support double-click)
     const fakePointerMoveEvent = {
       screenCoords: [-1, -1],
-      groundCoords: event.groundCoords,
+      mapCoords: event.mapCoords,
       picks: [],
       isDragging: false,
       pointerDownPicks: null,
       pointerDownScreenCoords: null,
-      pointerDownGroundCoords: null,
+      pointerDownMapCoords: null,
       sourceEvent: null
     };
 
-    // setTimeout(() => {
     this.handlePointerMove(fakePointerMoveEvent);
-    // }, 1000);
 
-    if (editAction) {
-      this.getState().onEdit({
-        updatedData: editAction.updatedData,
-        editType: editAction.editType,
-        affectedIndexes: editAction.featureIndexes,
-        editContext: editAction.editContext
-      });
-    }
-
-    return null;
+    return editAction;
   }
 
   handlePointerMove({
-    groundCoords
+    mapCoords
   }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();
     const result = { editAction: null, cancelMapPan: false };
@@ -119,7 +108,7 @@ export class DrawPolygonHandler extends ModeHandler {
         type: 'Feature',
         geometry: {
           type: 'LineString',
-          coordinates: [...clickSequence, groundCoords]
+          coordinates: [...clickSequence, mapCoords]
         }
       });
     } else {
@@ -128,7 +117,7 @@ export class DrawPolygonHandler extends ModeHandler {
         type: 'Feature',
         geometry: {
           type: 'Polygon',
-          coordinates: [[...clickSequence, groundCoords, clickSequence[0]]]
+          coordinates: [[...clickSequence, mapCoords, clickSequence[0]]]
         }
       });
     }

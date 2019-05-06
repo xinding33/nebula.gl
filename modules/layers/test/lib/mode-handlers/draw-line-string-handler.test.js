@@ -39,7 +39,7 @@ describe('when no selection', () => {
     const handler = new DrawLineStringHandler(featureCollection);
 
     handler.handlePointerMove(createPointerMoveEvent([1, 2]));
-    handler.handleClick(createClickEvent([1, 2]));
+    handler.handleClickAdapter(createClickEvent([1, 2]));
     handler.handlePointerMove(createPointerMoveEvent([2, 3]));
 
     const tentativeFeature = handler.getTentativeFeature();
@@ -58,9 +58,9 @@ describe('when no selection', () => {
     const handler = new DrawLineStringHandler(featureCollection);
 
     handler.handlePointerMove(createPointerMoveEvent([1, 2]));
-    const action1 = handler.handleClick(createClickEvent([1, 2]));
+    const action1 = handler.handleClickAdapter(createClickEvent([1, 2]));
     handler.handlePointerMove(createPointerMoveEvent([2, 3]));
-    const action2 = handler.handleClick(createClickEvent([2, 3]));
+    const action2 = handler.handleClickAdapter(createClickEvent([2, 3]));
 
     expect(action1).toBeNull();
     expect(action2).toEqual({
@@ -91,13 +91,13 @@ describe('when single LineString selected', () => {
     handler.setSelectedFeatureIndexes([lineStringFeatureIndex]);
 
     handler.handlePointerMove(createPointerMoveEvent([7, 8]));
-    const action = handler.handleClick(createClickEvent([7, 8]));
+    const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     if (!action) {
       throw new Error('action should be defined');
     }
     expect(action.editType).toEqual('addPosition');
-    expect(action.featureIndexes).toEqual([lineStringFeatureIndex]);
+    expect(action.editContext.featureIndexes).toEqual([lineStringFeatureIndex]);
     expect(action.editContext.position).toEqual([7, 8]);
     expect(action.editContext.positionIndexes).toEqual([
       lineStringFeature.geometry.coordinates.length
@@ -122,13 +122,13 @@ describe('when single LineString selected and drawAtFront enabled', () => {
     handler.setSelectedFeatureIndexes([lineStringFeatureIndex]);
 
     handler.handlePointerMove(createPointerMoveEvent([7, 8]));
-    const action = handler.handleClick(createClickEvent([7, 8]));
+    const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     if (!action) {
       throw new Error('action should be defined');
     }
     expect(action.editType).toEqual('addPosition');
-    expect(action.featureIndexes).toEqual([lineStringFeatureIndex]);
+    expect(action.editContext.featureIndexes).toEqual([lineStringFeatureIndex]);
     expect(action.editContext.position).toEqual([7, 8]);
     expect(action.editContext.positionIndexes).toEqual([0]);
     expect(action.updatedData.features[lineStringFeatureIndex]).toEqual({
@@ -149,7 +149,7 @@ describe('when multiple selection', () => {
     handler.setSelectedFeatureIndexes([1, 2]);
 
     handler.handlePointerMove(createPointerMoveEvent([7, 8]));
-    const action = handler.handleClick(createClickEvent([7, 8]));
+    const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     expect(action).toBeNull();
   });
@@ -165,7 +165,7 @@ describe('when non-LineString selected', () => {
     handler.setSelectedFeatureIndexes([featureIndex]);
 
     handler.handlePointerMove(createPointerMoveEvent([7, 8]));
-    const action = handler.handleClick(createClickEvent([7, 8]));
+    const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     expect(action).toBeNull();
   });

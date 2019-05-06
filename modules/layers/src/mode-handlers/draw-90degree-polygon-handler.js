@@ -12,8 +12,8 @@ import type { FeatureCollectionEditAction, EditHandle } from './mode-handler.js'
 import { ModeHandler, getPickedEditHandle, getEditHandlesForGeometry } from './mode-handler.js';
 
 export class Draw90DegreePolygonHandler extends ModeHandler {
-  getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
-    let handles = super.getEditHandles(picks, groundCoords);
+  getEditHandles(picks?: Array<Object>, mapCoords?: Position): EditHandle[] {
+    let handles = super.getEditHandles(picks, mapCoords);
 
     const tentativeFeature = this.getTentativeFeature();
     if (tentativeFeature) {
@@ -32,7 +32,7 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
   }
 
   handlePointerMove({
-    groundCoords
+    mapCoords
   }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();
     const result = { editAction: null, cancelMapPan: false };
@@ -53,11 +53,11 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
 
     let p3;
     if (clickSequence.length === 1) {
-      p3 = groundCoords;
+      p3 = mapCoords;
     } else {
       const p1 = clickSequence[clickSequence.length - 2];
       const p2 = clickSequence[clickSequence.length - 1];
-      [p3] = generatePointsParallelToLinePoints(p1, p2, groundCoords);
+      [p3] = generatePointsParallelToLinePoints(p1, p2, mapCoords);
     }
 
     if (clickSequence.length < 3) {
@@ -83,8 +83,8 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
     return result;
   }
 
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
-    super.handleClick(event);
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
+    super.handleClickAdapter(event);
 
     const { picks } = event;
     const tentativeFeature = this.getTentativeFeature();
@@ -116,12 +116,12 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
     // Trigger pointer move right away in order for it to update edit handles (to support double-click)
     const fakePointerMoveEvent = {
       screenCoords: [-1, -1],
-      groundCoords: event.groundCoords,
+      mapCoords: event.mapCoords,
       picks: [],
       isDragging: false,
       pointerDownPicks: null,
       pointerDownScreenCoords: null,
-      pointerDownGroundCoords: null,
+      pointerDownMapCoords: null,
       sourceEvent: null
     };
     this.handlePointerMove(fakePointerMoveEvent);

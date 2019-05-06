@@ -57,7 +57,7 @@ describe('SnappableHandler - handler tests', () => {
     expect(handler.getCursor({ isDragging: false })).toEqual('grab');
 
     const event = createPointerMoveEvent([1, 1]);
-    event.picks = [{ isEditingHandle: true, index: 1, object: {} }];
+    event.picks = [{ isGuide: true, index: 1, object: {} }];
     handler.handlePointerMove(event);
     expect(handler.getCursor({ isDragging: false })).toEqual('ns-resize');
   });

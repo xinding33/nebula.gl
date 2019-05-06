@@ -1,50 +1,62 @@
 // @flow
 import type { Position } from './geojson-types.js';
 
-// TODO: use types in edit-mode.js instead
-export type DeckGLPick = {
-  index: number,
+// Represents an edit action, i.e. a suggestion to update the data based on user interaction events
+export type EditAction<TData> = {
+  updatedData: TData,
+  editType: string,
+  editContext: any
+};
+
+// Represents an object "picked" from the screen. This usually reflects an object under the cursor
+export type Pick = {
   object: any,
-  isEditingHandle: ?boolean
+  index: number,
+  isGuide: boolean
 };
 
+// Represents a click event
 export type ClickEvent = {
-  picks: DeckGLPick[],
+  picks: Pick[],
   screenCoords: Position,
-  groundCoords: Position,
+  mapCoords: Position,
   sourceEvent: any
 };
 
+// Represents a double-click event
 export type DoubleClickEvent = {
-  groundCoords: Position,
+  mapCoords: Position,
   sourceEvent: any
 };
 
+// Represents an event that occurs when the pointer goes down and the cursor starts moving
 export type StartDraggingEvent = {
-  picks: DeckGLPick[],
+  picks: Pick[],
   screenCoords: Position,
-  groundCoords: Position,
+  mapCoords: Position,
   pointerDownScreenCoords: Position,
-  pointerDownGroundCoords: Position,
+  pointerDownMapCoords: Position,
   sourceEvent: any
 };
 
+// Represents an event that occurs after the pointer goes down, moves some, then the pointer goes back up
 export type StopDraggingEvent = {
-  picks: DeckGLPick[],
+  picks: Pick[],
   screenCoords: Position,
-  groundCoords: Position,
+  mapCoords: Position,
   pointerDownScreenCoords: Position,
-  pointerDownGroundCoords: Position,
+  pointerDownMapCoords: Position,
   sourceEvent: any
 };
 
+// Represents an event that occurs every time the pointer moves
 export type PointerMoveEvent = {
   screenCoords: Position,
-  groundCoords: Position,
-  picks: DeckGLPick[],
+  mapCoords: Position,
+  picks: Pick[],
   isDragging: boolean,
-  pointerDownPicks: ?(DeckGLPick[]),
+  pointerDownPicks: ?(Pick[]),
   pointerDownScreenCoords: ?Position,
-  pointerDownGroundCoords: ?Position,
+  pointerDownMapCoords: ?Position,
   sourceEvent: any
 };

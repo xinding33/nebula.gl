@@ -31,7 +31,7 @@ export class ModifyHandler extends ModeHandler {
     super.updateState(state);
   }
 
-  getEditHandles(picks?: Array<Object>, groundCoords?: Position): EditHandle[] {
+  getEditHandles(picks?: Array<Object>, mapCoords?: Position): EditHandle[] {
     let handles = [];
     const { features } = this.featureCollection.getObject();
 
@@ -45,12 +45,12 @@ export class ModifyHandler extends ModeHandler {
     }
 
     // intermediate edit handle
-    if (picks && picks.length && groundCoords) {
+    if (picks && picks.length && mapCoords) {
       const existingEditHandle = picks.find(
-        pick => pick.isEditingHandle && pick.object && pick.object.type === 'existing'
+        pick => pick.isGuide && pick.object && pick.object.type === 'existing'
       );
       // don't show intermediate point when too close to an existing edit handle
-      const featureAsPick = !existingEditHandle && picks.find(pick => !pick.isEditingHandle);
+      const featureAsPick = !existingEditHandle && picks.find(pick => !pick.isGuide);
 
       // is the feature in the pick selected
       if (
@@ -60,7 +60,7 @@ export class ModifyHandler extends ModeHandler {
       ) {
         let intermediatePoint = null;
         let positionIndexPrefix = [];
-        const referencePoint = point(groundCoords);
+        const referencePoint = point(mapCoords);
         // process all lines of the (single) feature
         recursivelyTraverseNestedArrays(
           featureAsPick.object.geometry.coordinates,
@@ -108,7 +108,7 @@ export class ModifyHandler extends ModeHandler {
     return nearestPointOnLine(line, inPoint);
   }
 
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     const clickedEditHandle = getPickedEditHandle(event.picks);
@@ -128,8 +128,8 @@ export class ModifyHandler extends ModeHandler {
           editAction = {
             updatedData,
             editType: 'removePosition',
-            featureIndexes: [clickedEditHandle.featureIndex],
             editContext: {
+              featureIndexes: [clickedEditHandle.featureIndex],
               positionIndexes: clickedEditHandle.positionIndexes,
               position: clickedEditHandle.position
             }
@@ -148,8 +148,8 @@ export class ModifyHandler extends ModeHandler {
           editAction = {
             updatedData,
             editType: 'addPosition',
-            featureIndexes: [clickedEditHandle.featureIndex],
             editContext: {
+              featureIndexes: [clickedEditHandle.featureIndex],
               positionIndexes: clickedEditHandle.positionIndexes,
               position: clickedEditHandle.position
             }
@@ -171,16 +171,16 @@ export class ModifyHandler extends ModeHandler {
 
     if (event.isDragging && editHandle) {
       const updatedData = this.getImmutableFeatureCollection()
-        .replacePosition(editHandle.featureIndex, editHandle.positionIndexes, event.groundCoords)
+        .replacePosition(editHandle.featureIndex, editHandle.positionIndexes, event.mapCoords)
         .getObject();
 
       editAction = {
         updatedData,
         editType: 'movePosition',
-        featureIndexes: [editHandle.featureIndex],
         editContext: {
+          featureIndexes: [editHandle.featureIndex],
           positionIndexes: editHandle.positionIndexes,
-          position: event.groundCoords
+          position: event.mapCoords
         }
       };
     }
@@ -195,7 +195,7 @@ export class ModifyHandler extends ModeHandler {
     }
 
     if (event.picks && event.picks.length > 0) {
-      const handlePicked = event.picks.some(pick => pick.isEditingHandle);
+      const handlePicked = event.picks.some(pick => pick.isGuide);
       if (handlePicked) {
         this.onUpdateCursor('cell');
       }
@@ -214,16 +214,16 @@ export class ModifyHandler extends ModeHandler {
     const editHandle = getPickedEditHandle(event.picks);
     if (selectedFeatureIndexes.length && editHandle && editHandle.type === 'intermediate') {
       const updatedData = this.getImmutableFeatureCollection()
-        .addPosition(editHandle.featureIndex, editHandle.positionIndexes, event.groundCoords)
+        .addPosition(editHandle.featureIndex, editHandle.positionIndexes, event.mapCoords)
         .getObject();
 
       editAction = {
         updatedData,
         editType: 'addPosition',
-        featureIndexes: [editHandle.featureIndex],
         editContext: {
+          featureIndexes: [editHandle.featureIndex],
           positionIndexes: editHandle.positionIndexes,
-          position: event.groundCoords
+          position: event.mapCoords
         }
       };
     }
@@ -238,7 +238,7 @@ export class ModifyHandler extends ModeHandler {
     const editHandle = getPickedEditHandle(event.picks);
     if (selectedFeatureIndexes.length && editHandle) {
       const updatedData = this.getImmutableFeatureCollection()
-        .replacePosition(editHandle.featureIndex, editHandle.positionIndexes, event.groundCoords)
+        .replacePosition(editHandle.featureIndex, editHandle.positionIndexes, event.mapCoords)
         .getObject();
 
       editAction = {
@@ -247,7 +247,7 @@ export class ModifyHandler extends ModeHandler {
         featureIndexes: [editHandle.featureIndex],
         editContext: {
           positionIndexes: editHandle.positionIndexes,
-          position: event.groundCoords
+          position: event.mapCoords
         }
       };
     }
@@ -259,7 +259,7 @@ export class ModifyHandler extends ModeHandler {
     const picks = this._lastPointerMovePicks;
 
     if (picks && picks.length > 0) {
-      const handlePicked = picks.some(pick => pick.isEditingHandle);
+      const handlePicked = picks.some(pick => pick.isGuide);
       if (handlePicked) {
         return 'cell';
       }

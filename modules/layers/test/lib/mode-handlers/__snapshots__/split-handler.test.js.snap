@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Split Polygon Handler  should reset tentativeFeature on handleClick  when lineString is outside the polygon lock90Degree 1`] = `
+exports[`Split Polygon Handler  should reset tentativeFeature on handleClickAdapter  when lineString is outside the polygon lock90Degree 1`] = `
 Object {
   "editContext": null,
   "editType": "split",

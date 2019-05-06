@@ -19,18 +19,14 @@ export class ScaleHandler extends ModeHandler {
 
     this._isScalable = Boolean(this._geometryBeingScaled) || this.isSelectionPicked(event.picks);
 
-    if (!this._isScalable || !event.pointerDownGroundCoords) {
+    if (!this._isScalable || !event.pointerDownMapCoords) {
       // Nothing to do
       return { editAction: null, cancelMapPan: false };
     }
 
     if (event.isDragging && this._geometryBeingScaled) {
       // Scale the geometry
-      editAction = this.getScaleAction(
-        event.pointerDownGroundCoords,
-        event.groundCoords,
-        'scaling'
-      );
+      editAction = this.getScaleAction(event.pointerDownMapCoords, event.mapCoords, 'scaling');
     }
 
     return { editAction, cancelMapPan: true };
@@ -50,7 +46,7 @@ export class ScaleHandler extends ModeHandler {
 
     if (this._geometryBeingScaled) {
       // Scale the geometry
-      editAction = this.getScaleAction(event.pointerDownGroundCoords, event.groundCoords, 'scaled');
+      editAction = this.getScaleAction(event.pointerDownMapCoords, event.mapCoords, 'scaled');
       this._geometryBeingScaled = null;
     }
 

@@ -236,7 +236,7 @@ describe('getEditHandles()', () => {
     index: 0
   };
 
-  const groundCoords = [-122.43862233312133, 37.77767798407437];
+  const mapCoords = [-122.43862233312133, 37.77767798407437];
 
   it('includes an intermediate edit handle', () => {
     const features = new ModifyHandler({
@@ -245,7 +245,7 @@ describe('getEditHandles()', () => {
     });
     features.setSelectedFeatureIndexes([0]);
 
-    const actual = features.getEditHandles([pick], groundCoords);
+    const actual = features.getEditHandles([pick], mapCoords);
 
     const intermediate = actual.find(editHandle => editHandle.type === 'intermediate');
     expect(JSON.stringify(intermediate)).toBe(
@@ -265,7 +265,7 @@ describe('getEditHandles()', () => {
     });
     features.setSelectedFeatureIndexes([0]);
 
-    const actual = features.getEditHandles(undefined, groundCoords);
+    const actual = features.getEditHandles(undefined, mapCoords);
 
     const intermediate = actual.find(editHandle => editHandle.type === 'intermediate');
     expect(intermediate).toBeUndefined();
@@ -278,7 +278,7 @@ describe('getEditHandles()', () => {
     });
     features.setSelectedFeatureIndexes([0]);
 
-    const actual = features.getEditHandles([], groundCoords);
+    const actual = features.getEditHandles([], mapCoords);
 
     const intermediate = actual.find(editHandle => editHandle.type === 'intermediate');
     expect(intermediate).toBeUndefined();
@@ -305,8 +305,8 @@ describe('getEditHandles()', () => {
     features.setSelectedFeatureIndexes([0]);
 
     const actual = features.getEditHandles(
-      [pick, { isEditingHandle: true, object: { type: 'existing' } }],
-      groundCoords
+      [pick, { isGuide: true, object: { type: 'existing' } }],
+      mapCoords
     );
 
     const intermediate = actual.find(editHandle => editHandle.type === 'intermediate');
@@ -319,7 +319,7 @@ describe('getEditHandles()', () => {
       features: [lineString]
     });
 
-    const actual = features.getEditHandles([pick], groundCoords);
+    const actual = features.getEditHandles([pick], mapCoords);
 
     const intermediate = actual.find(editHandle => editHandle.type === 'intermediate');
     expect(intermediate).toBeUndefined();
@@ -331,7 +331,7 @@ describe('getEditHandles()', () => {
       features: [point]
     });
     features.setSelectedFeatureIndexes([0]);
-    const actual = features.getEditHandles([{ object: point, index: 0 }], groundCoords);
+    const actual = features.getEditHandles([{ object: point, index: 0 }], mapCoords);
     const intermediate = actual.find(editHandle => editHandle.type === 'intermediate');
     expect(intermediate).toBeUndefined();
   });

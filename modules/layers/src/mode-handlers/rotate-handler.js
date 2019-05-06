@@ -19,18 +19,14 @@ export class RotateHandler extends ModeHandler {
 
     this._isRotatable = Boolean(this._geometryBeingRotated) || this.isSelectionPicked(event.picks);
 
-    if (!this._isRotatable || !event.pointerDownGroundCoords) {
+    if (!this._isRotatable || !event.pointerDownMapCoords) {
       // Nothing to do
       return { editAction: null, cancelMapPan: false };
     }
 
     if (event.isDragging && this._geometryBeingRotated) {
       // Rotate the geometry
-      editAction = this.getRotateAction(
-        event.pointerDownGroundCoords,
-        event.groundCoords,
-        'rotating'
-      );
+      editAction = this.getRotateAction(event.pointerDownMapCoords, event.mapCoords, 'rotating');
     }
 
     return { editAction, cancelMapPan: true };
@@ -50,11 +46,7 @@ export class RotateHandler extends ModeHandler {
 
     if (this._geometryBeingRotated) {
       // Rotate the geometry
-      editAction = this.getRotateAction(
-        event.pointerDownGroundCoords,
-        event.groundCoords,
-        'rotated'
-      );
+      editAction = this.getRotateAction(event.pointerDownMapCoords, event.mapCoords, 'rotated');
       this._geometryBeingRotated = null;
     }
 

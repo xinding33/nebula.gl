@@ -30,7 +30,7 @@ export class DrawCircleByBoundingBoxHandler extends TwoClickPolygonHandler {
     }
 
     const firstClickedPoint = clickSequence[0];
-    const centerCoordinates = getIntermediatePosition(firstClickedPoint, event.groundCoords);
+    const centerCoordinates = getIntermediatePosition(firstClickedPoint, event.mapCoords);
     const radius = Math.max(distance(firstClickedPoint, centerCoordinates), 0.001);
     this._setTentativeFeature(circle(centerCoordinates, radius, options));
 

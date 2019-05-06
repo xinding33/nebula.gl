@@ -6,8 +6,8 @@ import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ModeHandler } from './mode-handler.js';
 
 export class DrawLineStringHandler extends ModeHandler {
-  handleClick(event: ClickEvent): ?FeatureCollectionEditAction {
-    super.handleClick(event);
+  handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
+    super.handleClickAdapter(event);
 
     let editAction: ?FeatureCollectionEditAction = null;
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
@@ -36,16 +36,16 @@ export class DrawLineStringHandler extends ModeHandler {
       }
       const featureIndex = selectedFeatureIndexes[0];
       const updatedData = this.getImmutableFeatureCollection()
-        .addPosition(featureIndex, positionIndexes, event.groundCoords)
+        .addPosition(featureIndex, positionIndexes, event.mapCoords)
         .getObject();
 
       editAction = {
         updatedData,
         editType: 'addPosition',
-        featureIndexes: [featureIndex],
         editContext: {
+          featureIndexes: [featureIndex],
           positionIndexes,
-          position: event.groundCoords
+          position: event.mapCoords
         }
       };
 
@@ -67,7 +67,7 @@ export class DrawLineStringHandler extends ModeHandler {
     const result = { editAction: null, cancelMapPan: false };
 
     const clickSequence = this.getClickSequence();
-    const groundCoords = event.groundCoords;
+    const mapCoords = event.mapCoords;
 
     let startPosition: ?Position = null;
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
@@ -99,7 +99,7 @@ export class DrawLineStringHandler extends ModeHandler {
         properties: {},
         geometry: {
           type: 'LineString',
-          coordinates: [startPosition, groundCoords]
+          coordinates: [startPosition, mapCoords]
         }
       });
     }
