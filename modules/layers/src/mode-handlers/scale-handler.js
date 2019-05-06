@@ -12,7 +12,7 @@ export class ScaleHandler extends ModeHandler {
   _isScalable: boolean;
   _geometryBeingScaled: ?FeatureCollection;
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     let editAction: ?FeatureCollectionEditAction = null;
@@ -32,7 +32,7 @@ export class ScaleHandler extends ModeHandler {
     return { editAction, cancelMapPan: true };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     if (!this._isScalable) {
       return null;
     }
@@ -41,7 +41,7 @@ export class ScaleHandler extends ModeHandler {
     return null;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     if (this._geometryBeingScaled) {

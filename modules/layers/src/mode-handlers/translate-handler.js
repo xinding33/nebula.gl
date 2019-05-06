@@ -13,7 +13,7 @@ export class TranslateHandler extends ModeHandler {
   _geometryBeforeTranslate: ?FeatureCollection;
   _isTranslatable: boolean;
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     let editAction: ?FeatureCollectionEditAction = null;
@@ -38,7 +38,7 @@ export class TranslateHandler extends ModeHandler {
     return { editAction, cancelMapPan: true };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     if (!this._isTranslatable) {
       return null;
     }
@@ -47,7 +47,7 @@ export class TranslateHandler extends ModeHandler {
     return null;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     if (this._geometryBeforeTranslate) {

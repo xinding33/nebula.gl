@@ -9,7 +9,7 @@ import { ModifyHandler } from './modify-handler';
 
 export class ExtrudeHandler extends ModifyHandler {
   isPointAdded: boolean = false;
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     this._lastPointerMovePicks = event.picks;
@@ -60,7 +60,7 @@ export class ExtrudeHandler extends ModifyHandler {
     return { editAction, cancelMapPan };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
@@ -117,7 +117,7 @@ export class ExtrudeHandler extends ModifyHandler {
     return editAction;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();

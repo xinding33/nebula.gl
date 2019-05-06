@@ -160,7 +160,7 @@ export class ModifyHandler extends ModeHandler {
     return editAction;
   }
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     this._lastPointerMovePicks = event.picks;
@@ -188,12 +188,6 @@ export class ModifyHandler extends ModeHandler {
     // Cancel map panning if pointer went down on an edit handle
     const cancelMapPan = Boolean(editHandle);
 
-    if (cancelMapPan) {
-      // TODO: find a less hacky way to prevent map panning
-      // Stop propagation to prevent map panning while dragging an edit handle
-      event.sourceEvent.stopPropagation();
-    }
-
     if (event.picks && event.picks.length > 0) {
       const handlePicked = event.picks.some(pick => pick.isGuide);
       if (handlePicked) {
@@ -206,7 +200,7 @@ export class ModifyHandler extends ModeHandler {
     return { editAction, cancelMapPan };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();
@@ -231,7 +225,7 @@ export class ModifyHandler extends ModeHandler {
     return editAction;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     const selectedFeatureIndexes = this.getSelectedFeatureIndexes();

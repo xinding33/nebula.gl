@@ -489,40 +489,29 @@ export default class EditableGeoJsonLayer extends EditableLayer {
   }
 
   onLayerClick(event: ClickEvent) {
-    const editAction = this.state.modeHandler.handleClickAdapter(event);
-
-    if (editAction) {
-      this.props.onEdit(editAction);
-    }
+    this.getActiveModeHandler().handleClick(event);
   }
 
   onStartDragging(event: StartDraggingEvent) {
-    const editAction = this.state.modeHandler.handleStartDragging(event);
-
-    if (editAction) {
-      this.props.onEdit(editAction);
-    }
+    this.getActiveModeHandler().handleStartDragging(event);
   }
 
   onStopDragging(event: StopDraggingEvent) {
-    const editAction = this.state.modeHandler.handleStopDragging(event);
-
-    if (editAction) {
-      this.props.onEdit(editAction);
-    }
+    this.getActiveModeHandler().handleStopDragging(event);
   }
 
   onPointerMove(event: PointerMoveEvent) {
-    const { editAction } = this.state.modeHandler.handlePointerMove(event);
-
-    if (editAction) {
-      this.props.onEdit(editAction);
-    }
+    this.getActiveModeHandler().handlePointerMove(event);
   }
 
+  // TODO: get cursor lazily
   getCursor({ isDragging }: { isDragging: boolean }) {
-    // return this.state.modeHandler.getCursor({ isDragging });
-    return this.state.cursor;
+    return this.getActiveModeHandler().getCursor({ isDragging });
+    // return this.state.cursor;
+  }
+
+  getActiveModeHandler(): ModeHandler {
+    return this.state.modeHandler;
   }
 }
 

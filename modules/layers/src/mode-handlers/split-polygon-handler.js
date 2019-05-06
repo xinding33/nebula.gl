@@ -97,7 +97,7 @@ export class SplitPolygonHandler extends ModeHandler {
     return editAction;
   }
 
-  handlePointerMove({
+  handlePointerMoveAdapter({
     mapCoords
   }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();

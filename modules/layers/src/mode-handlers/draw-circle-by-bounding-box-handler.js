@@ -8,7 +8,7 @@ import { TwoClickPolygonHandler } from './two-click-polygon-handler.js';
 import { getIntermediatePosition } from './mode-handler.js';
 
 export class DrawCircleByBoundingBoxHandler extends TwoClickPolygonHandler {
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };

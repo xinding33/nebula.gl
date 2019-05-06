@@ -10,7 +10,7 @@ import { ThreeClickPolygonHandler } from './three-click-polygon-handler.js';
 import { getIntermediatePosition } from './mode-handler.js';
 
 export class DrawEllipseUsingThreePointsHandler extends ThreeClickPolygonHandler {
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };

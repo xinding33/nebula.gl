@@ -41,15 +41,15 @@ describe('SnappableHandler - handler tests', () => {
     expect(handler.getFeatureCollection()).toEqual(differentFeatureCollection);
   });
 
-  test('handlePointerMove()', () => {
+  test('handlePointerMoveAdapter()', () => {
     const event = createPointerMoveEvent([1, 1]);
-    const action = handler.handlePointerMove(event);
+    const action = handler.handlePointerMoveAdapter(event);
     expect(action.cancelMapPan).toBeFalsy();
   });
 
-  test('handleStopDragging()', () => {
+  test('handleStopDraggingAdapter()', () => {
     const event = createPointerDragEvent([20, 20], [20, 20]);
-    const action = handler.handleStopDragging(event);
+    const action = handler.handleStopDraggingAdapter(event);
     expect(action).toBeNull();
   });
 
@@ -58,7 +58,7 @@ describe('SnappableHandler - handler tests', () => {
 
     const event = createPointerMoveEvent([1, 1]);
     event.picks = [{ isGuide: true, index: 1, object: {} }];
-    handler.handlePointerMove(event);
+    handler.handlePointerMoveAdapter(event);
     expect(handler.getCursor({ isDragging: false })).toEqual('ns-resize');
   });
 });

@@ -61,7 +61,7 @@ export class DrawLineStringHandler extends ModeHandler {
     return editAction;
   }
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };

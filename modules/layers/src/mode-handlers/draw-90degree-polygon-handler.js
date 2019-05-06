@@ -31,7 +31,7 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
     return handles;
   }
 
-  handlePointerMove({
+  handlePointerMoveAdapter({
     mapCoords
   }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();
@@ -124,7 +124,7 @@ export class Draw90DegreePolygonHandler extends ModeHandler {
       pointerDownMapCoords: null,
       sourceEvent: null
     };
-    this.handlePointerMove(fakePointerMoveEvent);
+    this.handlePointerMoveAdapter(fakePointerMoveEvent);
 
     return editAction;
   }

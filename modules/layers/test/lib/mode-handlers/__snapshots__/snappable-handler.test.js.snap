@@ -1516,7 +1516,7 @@ Array [
 ]
 `;
 
-exports[`SnappableHandler - TranslateHandler tests handlePointerMove() - enableSnapping = false 1`] = `
+exports[`SnappableHandler - TranslateHandler tests handlePointerMoveAdapter() - enableSnapping = false 1`] = `
 Array [
   Object {
     "editContext": null,
@@ -1754,7 +1754,7 @@ Array [
 ]
 `;
 
-exports[`SnappableHandler - TranslateHandler tests handlePointerMove() - positive case 1`] = `
+exports[`SnappableHandler - TranslateHandler tests handlePointerMoveAdapter() - positive case 1`] = `
 Array [
   Object {
     "editContext": null,
@@ -1992,7 +1992,7 @@ Array [
 ]
 `;
 
-exports[`SnappableHandler - TranslateHandler tests handlePointerMove() - this._getEditHandlePicks does not return anything 1`] = `
+exports[`SnappableHandler - TranslateHandler tests handlePointerMoveAdapter() - this._getEditHandlePicks does not return anything 1`] = `
 Array [
   Object {
     "editContext": null,

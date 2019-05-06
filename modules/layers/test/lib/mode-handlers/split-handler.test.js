@@ -16,7 +16,7 @@ describe('Split Polygon Handler ', () => {
     const handler = new SplitPolygonHandler(featureCollection);
     handler.setSelectedFeatureIndexes([2]);
     handler.handleClickAdapter(createClickEvent([1, 2]));
-    handler.handlePointerMove(createPointerMoveEvent([2, 3]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([2, 3]));
     const tentativeFeature = handler.getTentativeFeature();
     expect(tentativeFeature).toEqual({
       type: 'Feature',
@@ -42,7 +42,7 @@ describe('Split Polygon Handler ', () => {
       const handler = new SplitPolygonHandler(featureCollection);
       handler.setSelectedFeatureIndexes([2]);
       const action1 = handler.handleClickAdapter(createClickEvent([-2, -2]));
-      handler.handlePointerMove(createPointerMoveEvent([-1, -1]));
+      handler.handlePointerMoveAdapter(createPointerMoveEvent([-1, -1]));
       const action = handler.handleClickAdapter(createClickEvent([-1, -1]));
       expect(action1).toBeNull();
       expect(action).toBeNull();
@@ -53,7 +53,7 @@ describe('Split Polygon Handler ', () => {
       const handler = new SplitPolygonHandler(featureCollection);
       handler.setSelectedFeatureIndexes([2]);
       const action1 = handler.handleClickAdapter(createClickEvent([-2, -2]));
-      handler.handlePointerMove(createPointerMoveEvent([-4, -4]));
+      handler.handlePointerMoveAdapter(createPointerMoveEvent([-4, -4]));
       const action = handler.handleClickAdapter(createClickEvent([-4, -4]));
       expect(action1).toBeNull();
       expect(action).toBeNull();
@@ -65,7 +65,7 @@ describe('Split Polygon Handler ', () => {
       handler.setModeConfig({ lock90Degree: true });
       handler.setSelectedFeatureIndexes([2]);
       const action1 = handler.handleClickAdapter(createClickEvent([-2, -2]));
-      handler.handlePointerMove(createPointerMoveEvent([-4, -4]));
+      handler.handlePointerMoveAdapter(createPointerMoveEvent([-4, -4]));
       const action = handler.handleClickAdapter(createClickEvent([-4, -4]));
       expect(action1).toBeNull();
       expect(action).toMatchSnapshot();
@@ -81,7 +81,7 @@ describe('Split Polygon Handler ', () => {
     handler.setModeConfig({});
     handler.setSelectedFeatureIndexes([0]);
     handler.handleClickAdapter(createClickEvent([-2, -2]));
-    handler.handlePointerMove(createPointerMoveEvent([2, 3]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([2, 3]));
     const action = handler.handleClickAdapter(createClickEvent([2, 3]));
 
     const expectedAction: FeatureCollectionEditAction = {
@@ -142,7 +142,7 @@ describe('Split Polygon Handler ', () => {
     handler.setModeConfig({});
     handler.setSelectedFeatureIndexes([0]);
     handler.handleClickAdapter(createClickEvent([-2, -2]));
-    handler.handlePointerMove(createPointerMoveEvent([2, 3]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([2, 3]));
     const action = handler.handleClickAdapter(createClickEvent([2, 3]));
 
     const expectedAction: FeatureCollectionEditAction = {

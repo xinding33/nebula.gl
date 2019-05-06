@@ -86,12 +86,12 @@ export class DrawPolygonHandler extends ModeHandler {
       sourceEvent: null
     };
 
-    this.handlePointerMove(fakePointerMoveEvent);
+    this.handlePointerMoveAdapter(fakePointerMoveEvent);
 
     return editAction;
   }
 
-  handlePointerMove({
+  handlePointerMoveAdapter({
     mapCoords
   }: PointerMoveEvent): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const clickSequence = this.getClickSequence();

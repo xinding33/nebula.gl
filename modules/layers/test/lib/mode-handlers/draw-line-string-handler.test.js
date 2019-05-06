@@ -38,9 +38,9 @@ describe('when no selection', () => {
   test('sets tentative feature to a LineString after first click', () => {
     const handler = new DrawLineStringHandler(featureCollection);
 
-    handler.handlePointerMove(createPointerMoveEvent([1, 2]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([1, 2]));
     handler.handleClickAdapter(createClickEvent([1, 2]));
-    handler.handlePointerMove(createPointerMoveEvent([2, 3]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([2, 3]));
 
     const tentativeFeature = handler.getTentativeFeature();
 
@@ -57,9 +57,9 @@ describe('when no selection', () => {
   test('adds a new feature after two clicks', () => {
     const handler = new DrawLineStringHandler(featureCollection);
 
-    handler.handlePointerMove(createPointerMoveEvent([1, 2]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([1, 2]));
     const action1 = handler.handleClickAdapter(createClickEvent([1, 2]));
-    handler.handlePointerMove(createPointerMoveEvent([2, 3]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([2, 3]));
     const action2 = handler.handleClickAdapter(createClickEvent([2, 3]));
 
     expect(action1).toBeNull();
@@ -90,7 +90,7 @@ describe('when single LineString selected', () => {
     const handler = new DrawLineStringHandler(featureCollection);
     handler.setSelectedFeatureIndexes([lineStringFeatureIndex]);
 
-    handler.handlePointerMove(createPointerMoveEvent([7, 8]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([7, 8]));
     const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     if (!action) {
@@ -121,7 +121,7 @@ describe('when single LineString selected and drawAtFront enabled', () => {
     });
     handler.setSelectedFeatureIndexes([lineStringFeatureIndex]);
 
-    handler.handlePointerMove(createPointerMoveEvent([7, 8]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([7, 8]));
     const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     if (!action) {
@@ -148,7 +148,7 @@ describe('when multiple selection', () => {
 
     handler.setSelectedFeatureIndexes([1, 2]);
 
-    handler.handlePointerMove(createPointerMoveEvent([7, 8]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([7, 8]));
     const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     expect(action).toBeNull();
@@ -164,7 +164,7 @@ describe('when non-LineString selected', () => {
     );
     handler.setSelectedFeatureIndexes([featureIndex]);
 
-    handler.handlePointerMove(createPointerMoveEvent([7, 8]));
+    handler.handlePointerMoveAdapter(createPointerMoveEvent([7, 8]));
     const action = handler.handleClickAdapter(createClickEvent([7, 8]));
 
     expect(action).toBeNull();

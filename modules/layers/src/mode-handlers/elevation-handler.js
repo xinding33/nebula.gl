@@ -22,18 +22,18 @@ export class ElevationHandler extends ModifyHandler {
     });
   }
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const editHandle = getPickedEditHandle(event.pointerDownPicks);
     const position = editHandle ? editHandle.position : event.mapCoords;
-    return super.handlePointerMove(this.makeElevatedEvent(event, position));
+    return super.handlePointerMoveAdapter(this.makeElevatedEvent(event, position));
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     const editHandle = getPickedEditHandle(event.picks);
     const position = editHandle ? editHandle.position : event.mapCoords;
-    return super.handleStopDragging(this.makeElevatedEvent(event, position));
+    return super.handleStopDraggingAdapter(this.makeElevatedEvent(event, position));
   }
 
   getCursor(params: { isDragging: boolean }): string {

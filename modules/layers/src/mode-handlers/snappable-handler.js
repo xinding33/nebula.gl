@@ -196,13 +196,15 @@ export class SnappableHandler extends ModeHandler {
       : event;
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     this._startDragSnapHandlePosition = (getPickedEditHandle(event.picks) || {}).position;
-    return this._handler.handleStartDragging(event);
+    return this._handler.handleStartDraggingAdapter(event);
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
-    const modeActionSummary = this._handler.handleStopDragging(this._getSnapAwareEvent(event));
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+    const modeActionSummary = this._handler.handleStopDraggingAdapter(
+      this._getSnapAwareEvent(event)
+    );
 
     this._editHandlePicks = null;
     this._isSnapped = false;
@@ -213,7 +215,7 @@ export class SnappableHandler extends ModeHandler {
     return this._handler.getCursor(event);
   }
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const { enableSnapping } = this._handler.getModeConfig() || {};
@@ -226,7 +228,9 @@ export class SnappableHandler extends ModeHandler {
       }
     }
 
-    const modeActionSummary = this._handler.handlePointerMove(this._getSnapAwareEvent(event));
+    const modeActionSummary = this._handler.handlePointerMoveAdapter(
+      this._getSnapAwareEvent(event)
+    );
     const { editAction } = modeActionSummary;
     if (editAction) {
       this._updatePickedHandlePosition(editAction);

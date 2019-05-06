@@ -96,7 +96,6 @@ export class ModeHandler extends EditMode<
 
   // TODO: delete me
   getSelectedFeatureIndexes(): number[] {
-    console.warn('Deprecated call to getSelectedFeatureIndexes'); // eslint-disable-line
     return this.getSelectedIndexes();
   }
 
@@ -276,24 +275,54 @@ export class ModeHandler extends EditMode<
     }
   }
 
-  // TODO: delete once all ModeHandler implementations override handleClick instead
+  handlePointerMove(event: PointerMoveEvent): void {
+    const { editAction, cancelMapPan } = this.handlePointerMoveAdapter(event);
+
+    if (cancelMapPan) {
+      // TODO: is there a less hacky way to prevent map panning?
+      // Stop propagation to prevent map panning while dragging an edit handle
+      event.sourceEvent.stopPropagation();
+    }
+
+    if (editAction) {
+      this.onEdit(editAction);
+    }
+  }
+
+  handleStartDragging(event: StartDraggingEvent): void {
+    const editAction = this.handleStartDraggingAdapter(event);
+
+    if (editAction) {
+      this.onEdit(editAction);
+    }
+  }
+
+  handleStopDragging(event: StopDraggingEvent): void {
+    const editAction = this.handleStopDraggingAdapter(event);
+
+    if (editAction) {
+      this.onEdit(editAction);
+    }
+  }
+
+  // TODO: delete these adapters once all ModeHandler implementations don't use them
   handleClickAdapter(event: ClickEvent): ?FeatureCollectionEditAction {
     this._clickSequence.push(event.mapCoords);
 
     return null;
   }
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     return { editAction: null, cancelMapPan: false };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     return null;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     return null;
   }
 }

@@ -7,7 +7,7 @@ import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { ThreeClickPolygonHandler } from './three-click-polygon-handler.js';
 
 export class DrawRectangleUsingThreePointsHandler extends ThreeClickPolygonHandler {
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };

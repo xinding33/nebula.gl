@@ -52,21 +52,21 @@ export class CompositeModeHandler extends ModeHandler {
     return this._coalesce(handler => handler.handleClickAdapter(event));
   }
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     return this._coalesce(
-      handler => handler.handlePointerMove(event),
+      handler => handler.handlePointerMoveAdapter(event),
       result => result && Boolean(result.editAction)
     );
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
-    return this._coalesce(handler => handler.handleStartDragging(event));
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+    return this._coalesce(handler => handler.handleStartDraggingAdapter(event));
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
-    return this._coalesce(handler => handler.handleStopDragging(event));
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+    return this._coalesce(handler => handler.handleStopDraggingAdapter(event));
   }
 
   getTentativeFeature(): ?Feature {

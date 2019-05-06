@@ -5,7 +5,7 @@ import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { TranslateHandler } from './translate-handler';
 
 export class DuplicateHandler extends TranslateHandler {
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     if (!this._isTranslatable) {
       return null;
     }

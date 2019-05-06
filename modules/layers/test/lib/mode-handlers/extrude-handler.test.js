@@ -231,7 +231,7 @@ describe('getPointForPositionIndexes()', () => {
   });
 });
 
-describe('handleStartDragging()', () => {
+describe('handleStartDraggingAdapter()', () => {
   it('handle Start Dragging', () => {
     const features = new ExtrudeHandler({
       type: 'FeatureCollection',
@@ -257,7 +257,7 @@ describe('handleStartDragging()', () => {
       pointerDownMapCoords: [0, 0],
       sourceEvent: null
     };
-    const actual: any = features.handleStartDragging(startEvent);
+    const actual: any = features.handleStartDraggingAdapter(startEvent);
     expect(actual.editType).toEqual('startExtruding');
     expect(actual.updatedData.features[0].geometry.coordinates[0].length).toEqual(
       polygonFeature2.geometry.coordinates[0].length + 1
@@ -265,7 +265,7 @@ describe('handleStartDragging()', () => {
   });
 });
 
-describe('handleStopDragging()', () => {
+describe('handleStopDraggingAdapter()', () => {
   it('handle Stop Dragging', () => {
     const features = new ExtrudeHandler({
       type: 'FeatureCollection',
@@ -291,7 +291,7 @@ describe('handleStopDragging()', () => {
       pointerDownMapCoords: [0, 0],
       sourceEvent: null
     };
-    const actual: any = features.handleStopDragging(event);
+    const actual: any = features.handleStopDraggingAdapter(event);
     expect(actual.editType).toEqual('extruded');
     expect(actual.updatedData.features[0].geometry.coordinates[0].length).toEqual(
       polygonFeature2.geometry.coordinates[0].length
@@ -299,7 +299,7 @@ describe('handleStopDragging()', () => {
   });
 });
 
-describe('handlePointerMove()', () => {
+describe('handlePointerMoveAdapter()', () => {
   it('handle Pointer Move', () => {
     const features = new ExtrudeHandler({
       type: 'FeatureCollection',
@@ -327,7 +327,7 @@ describe('handlePointerMove()', () => {
       pointerDownMapCoords: [0, 0],
       sourceEvent: null
     };
-    const actual: any = features.handlePointerMove(event);
+    const actual: any = features.handlePointerMoveAdapter(event);
 
     expect(actual.editAction.editType).toEqual('extruding');
     expect(actual.editAction.updatedData.features[0].geometry.coordinates[0].length).toEqual(

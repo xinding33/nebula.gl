@@ -7,7 +7,7 @@ import type { FeatureCollectionEditAction } from './mode-handler.js';
 import { TwoClickPolygonHandler } from './two-click-polygon-handler.js';
 
 export class DrawCircleFromCenterHandler extends TwoClickPolygonHandler {
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     const result = { editAction: null, cancelMapPan: false };

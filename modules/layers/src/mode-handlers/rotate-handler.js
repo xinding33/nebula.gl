@@ -12,7 +12,7 @@ export class RotateHandler extends ModeHandler {
   _isRotatable: boolean;
   _geometryBeingRotated: ?FeatureCollection;
 
-  handlePointerMove(
+  handlePointerMoveAdapter(
     event: PointerMoveEvent
   ): { editAction: ?FeatureCollectionEditAction, cancelMapPan: boolean } {
     let editAction: ?FeatureCollectionEditAction = null;
@@ -32,7 +32,7 @@ export class RotateHandler extends ModeHandler {
     return { editAction, cancelMapPan: true };
   }
 
-  handleStartDragging(event: StartDraggingEvent): ?FeatureCollectionEditAction {
+  handleStartDraggingAdapter(event: StartDraggingEvent): ?FeatureCollectionEditAction {
     if (!this._isRotatable) {
       return null;
     }
@@ -41,7 +41,7 @@ export class RotateHandler extends ModeHandler {
     return null;
   }
 
-  handleStopDragging(event: StopDraggingEvent): ?FeatureCollectionEditAction {
+  handleStopDraggingAdapter(event: StopDraggingEvent): ?FeatureCollectionEditAction {
     let editAction: ?FeatureCollectionEditAction = null;
 
     if (this._geometryBeingRotated) {
