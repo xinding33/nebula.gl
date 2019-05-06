@@ -321,6 +321,7 @@ export default class EditableGeoJsonLayer extends EditableLayer {
         tentativeFeature: this.state.tentativeFeature,
         editHandles: this.state.editHandles
       },
+      cursor: this.state.cursor,
       onEdit: (editAction: EditAction<FeatureCollection>) => {
         props.onEdit(editAction);
       },
